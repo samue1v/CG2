@@ -15,25 +15,27 @@ void Scene::build(){
     material2.ka = Vec3(0,0.5,0);
     material2.ke = Vec3(0,0.7,0);
 
-    material3.kd = Vec3(0,0,1);
+    material3.kd = Vec3(0,0,0.7);
     material3.ke = Vec3(0,0,0.7);
+    material3.ka = Vec3(0,0,0.2);
     material1.shininess = 1000;
     material2.shininess = 100;
     material3.shininess = 100;
-    auto sphere1 = std::make_shared<Sphere>(Point3(0,0,-20),2);
-    auto sphere2 = std::make_shared<Sphere>(Point3(0,0,-100),50);
-    auto sphere3 = std::make_shared<Sphere>(Point3(2,0,-5),1);
+
+    auto sphere1 = std::make_shared<Sphere>(Point3(0,0,-40),2);
+    auto sphere2 = std::make_shared<Sphere>(Point3(0,0,-120),50);
+    auto sphere3 = std::make_shared<Sphere>(Point3(0,0,-25),2);
     sphere1->__material = material1;
     sphere2->__material = material2;
     sphere3->__material = material3;
 
-    auto plight = std::make_shared<PointLight>(Point3(3,5,-10),Vec3(1,1,1));
+    auto plight = std::make_shared<PointLight>(Point3(0,0,-30),Vec3(1,1,1));
     auto alight = std::make_shared<AmbientLight>(Vec3(0.3,0.3,0.3));
     objects.push_back(sphere1);
     objects.push_back(sphere2);
     //objects.push_back(sphere3);
     lights.push_back(plight);
-    //lights.push_back(alight);
+    lights.push_back(alight);
 
 }
 
@@ -54,6 +56,7 @@ bool Scene::render(std::unique_ptr<uint8_t[]> & data){
             double x = -wj / 2 + dx / 2 + c * dx;
             canvasPoint = Point3(x, y, -canvasDistance);
             Ray ray(canvasPoint,P0);
+            ray.setOrigin(canvasPoint);
             foundSmth = castRay(ray, hitdata); 
             int begin = (l*SCREEN_H + c)*3;
             

@@ -57,7 +57,7 @@ class Vec3{
 
         
 
-        double len() const{ return fsqrt(e[0]*e[0] + e[1]*e[1] + e[2]*e[2]);}
+        double len() const{ return sqrt(e[0]*e[0] + e[1]*e[1] + e[2]*e[2]);}
 
 
 };

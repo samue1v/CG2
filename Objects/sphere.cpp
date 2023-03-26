@@ -12,7 +12,7 @@ Sphere::Sphere(Point3 center, double radius){
 
 bool Sphere::computeIntersection(const Ray & ray, HitMemory & hitdata){
     Vec3 oc = ray.getOrigin() - __center;
-    Vec3 rayDir = ray.getRay();
+    Vec3 rayDir = ray.getUnitRay();
     double a = dot(rayDir,rayDir);
     double b = 2 * dot(oc,rayDir);
     double c = dot(oc,oc) - __radius * __radius;
