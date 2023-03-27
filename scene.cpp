@@ -133,7 +133,7 @@ bool Scene::castRay(const Ray & ray, HitMemory & hitdata){
     Vec3 localContrib = hitdata.pIntensity * (1-localReflect);
     Vec3 minusDir = -ray.getRay();
     Vec3 reflectedVec = 2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir;
-    Ray reflectedRay(reflectedVec*2 +hitdata.poi,hitdata.poi);
+    Ray reflectedRay(reflectedVec +hitdata.poi,hitdata.poi);
 
     bool recursion = castRay(reflectedRay,hitdata);
 
