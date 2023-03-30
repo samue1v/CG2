@@ -26,8 +26,8 @@ bool Sphere::computeIntersection(const Ray & ray, HitMemory & hitdata){
     double t2 = (-b - sqrt(discriminant)) / (2.0 * a);
 
     double local_t;
-    bool t1_cond = (t1>=1e-10 && t1<=1e20);
-    bool t2_cond = (t2>=1e-10 && t2<=1e20);
+    bool t1_cond = (t1>=1e-10 && t1<=1e10);
+    bool t2_cond = (t2>=1e-10 && t2<=1e10);
 
     if(!(t1_cond || t2_cond)){
         return false;

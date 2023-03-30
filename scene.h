@@ -6,6 +6,7 @@
 #include "hitMemory.h"
 #include "camera.h"
 #include "Objects/sphere.h"
+#include "Objects/plane.h"
 #include "Lights/pointLight.h"
 #include "Lights/ambientLight.h"
 
@@ -14,12 +15,13 @@ class Scene{
     private:
         std::vector<std::shared_ptr<ObjectBase>> objects;
         std::vector<std::shared_ptr<LightBase>> lights;
+        bool fresnel(const Ray & incidentRay,const Vec3 & normal,double & kr) const;
     public:
         Scene();
         ~Scene() = default;
         void build();
         bool render(std::unique_ptr<uint8_t[]> & data );
-        bool castRay(const Ray & ray, HitMemory & hitdata);
+        bool castRay(const Ray & ray, HitMemory & hitdata,int depth);
 
 };
 

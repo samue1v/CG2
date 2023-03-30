@@ -8,7 +8,6 @@
 class HitMemory{
     public:
         double closest_t;
-        int recursion_depth;
         Point3 poi;
         Vec3 poiNormal;
         Vec3 pIntensity;
