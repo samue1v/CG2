@@ -52,9 +52,9 @@ void Ray::setCurrentRefracIndex(double currentRefracIndex){
 }
 
 bool Ray::reflectRay(const HitMemory & hitdata,Ray & reflectedRay) const{
-    Vec3 minusDir = -__ray;
-    Vec3 reflectedVec = 2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir;
-    reflectedRay =  Ray(reflectedVec + hitdata.poi,hitdata.poi);
+    Vec3 minusDir = -__unitRay;
+    Vec3 reflectedVec = unit(2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir);
+    reflectedRay =  Ray(reflectedVec + hitdata.poi,hitdata.poi + reflectedVec*0.01);
     return true;
 }
 
@@ -68,7 +68,7 @@ bool Ray::refractRay(const HitMemory & hitdata, Ray & refractedRay) const{
         i_dot_n = -i_dot_n;
     }
     else{
-        refN = -hitdata.poiNormal;
+        refN = hitdata.poiNormal * -1;
         etaT = 1.0;
         etaI = hitdata.material.refractIndex;
     }
@@ -77,10 +77,7 @@ bool Ray::refractRay(const HitMemory & hitdata, Ray & refractedRay) const{
     if(k<0){
         return false;
     }
-    Vec3 refractVec3Ray =  (__unitRay + (i_dot_n * refN)) * eta - refN*sqrt(k);
-    refractedRay.setOrigin(hitdata.poi);
-    refractedRay.setDest(hitdata.poi);
-    refractedRay.setUnitRay(refractVec3Ray);
-    refractedRay.setRay(refractVec3Ray);
+    Vec3 refractVec3Ray =  unit((__unitRay + (i_dot_n * refN)) * eta - refN*sqrt(k));
+    refractedRay = Ray(hitdata.poi +refractVec3Ray,hitdata.poi + refractVec3Ray*0.01);
     return true;
 }

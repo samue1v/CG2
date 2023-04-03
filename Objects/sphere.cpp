@@ -29,19 +29,17 @@ bool Sphere::computeIntersection(const Ray & ray, HitMemory & hitdata){
     bool t1_cond = (t1>=1e-10 && t1<=1e10);
     bool t2_cond = (t2>=1e-10 && t2<=1e10);
 
-    if(!(t1_cond || t2_cond)){
+    if(!(t1_cond || t2_cond)) {
         return false;
-    }
-    if(t1_cond && t1<t2){
-        local_t = t1;
-    }
-
-    if(t2_cond && t2<t1){
+    } 
+    else if (!t1_cond) {
         local_t = t2;
-    }
-    
-    if(hitdata.closest_t < local_t){
-        return false;
+    } 
+    else if (!t2_cond) {
+        local_t = t1;
+    } 
+    else {
+        t1<t2 ? local_t = t1 : local_t = t2;
     }
 
     Point3 poi = ray.getOrigin() + rayDir*local_t;

@@ -10,9 +10,10 @@ void Scene::build(){
     material1.kd = Vec3(0.7,0,0);
     material1.ke = Vec3(0.7,0,0);
     material1.ka = Vec3(0.2,0,0);
-    material1.shininess = 500;
-    material1.type = reflective;
+    material1.shininess = 100;
+    material1.type = refractive;
     material1.reflectiveIndex = 0.7;
+    material1.transparency = 0.3;
     material1.refractIndex = 1.2;
     
     material2.kd = Vec3(0,0,0.7);
@@ -55,7 +56,7 @@ void Scene::build(){
     
 
     auto plane1 = std::make_shared<Plane>(Point3(1,0,-15),Vec3(0,0,1));
-    auto plane2 = std::make_shared<Plane>(Point3(1,-1,-5),Vec3(0,1,0));
+    auto plane2 = std::make_shared<Plane>(Point3(1,-1,-15),Vec3(0,0,1));
     plane1->__material = material5;
     plane2->__material = material5;
 
@@ -96,7 +97,7 @@ bool Scene::render(std::unique_ptr<uint8_t[]> & data){
     Point3 P0(0,0,0);
     HitMemory hitdata;
     bool foundSmth;
-    int recursionDepth = 1;
+    int recursionDepth = 2;
     for (int l = 0; l < SCREEN_W; l++) {
         double y = hj / 2 - dy / 2 - l * dy;
         for (int c = 0; c < SCREEN_H; c++) {
@@ -133,10 +134,10 @@ bool Scene::render(std::unique_ptr<uint8_t[]> & data){
 bool Scene::castRay(const Ray & ray, HitMemory & hitdata,int depth){
     hitdata.closest_t = DOUBLE_INFINITY;
     hitdata.pIntensity = Vec3(0,0,0);
-    double localTransparency = hitdata.material.transparency;
+    double localTransparency;
     bool objIntersect = false;
     bool iterIntersect = false;
-    double kr = 1.0;
+    double kr;
     double localReflect;
     Vec3 localIntensity,refractedIntensity,reflectedIntensity;
     
@@ -157,22 +158,19 @@ bool Scene::castRay(const Ray & ray, HitMemory & hitdata,int depth){
         for (auto light : lights){
             light->computeLightning(hitdata,ray,objects);
         }
+        localTransparency = hitdata.material.transparency;
+        localReflect = hitdata.material.reflectiveIndex;
+        localIntensity = hitdata.pIntensity;
     }
-
-    localIntensity = hitdata.pIntensity;
 
     if(hitdata.material.type == opaque || depth <= 0){
         return true;
     }
 
     else if(hitdata.material.type == reflective){
-        
-        localReflect = hitdata.material.reflectiveIndex;
-        Vec3 minusDir = -ray.getRay();
-        Vec3 reflectedVec = 2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir;
-        //std::cout<<reflectedVec<<std::endl;
-        Ray reflectedRay(reflectedVec +hitdata.poi,hitdata.poi);
-        bool ReflectedRecursion = castRay(reflectedRay,hitdata,--depth);
+        Ray reflectedRay;
+        ray.reflectRay(hitdata,reflectedRay);
+        bool ReflectedRecursion = castRay(reflectedRay,hitdata,depth-1);
         reflectedIntensity = hitdata.pIntensity;
         hitdata.pIntensity = hitdata.pIntensity * localReflect + (localIntensity * (1-localReflect));
         return true; 
@@ -187,16 +185,18 @@ bool Scene::castRay(const Ray & ray, HitMemory & hitdata,int depth){
         //if(fresnel(ray,hitdata.poiNormal,kr)){
             Ray refractedRay;
             ray.refractRay(hitdata,refractedRay);
-            bool refractRecursion = castRay(refractedRay,hitdata,--depth);
+            bool refractRecursion = castRay(refractedRay,hitdata,depth-1);
             refractedIntensity = hitdata.pIntensity;
         //}
-        Vec3 minusDir = -ray.getRay();
-        Vec3 reflectedVec = 2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir;
-        Ray reflectedRay(reflectedVec +hitdata.poi,hitdata.poi);
-        //bool ReflectedRecursion = castRay(reflectedRay,hitdata,--depth);
-        //reflectedIntensity = hitdata.pIntensity;
-        std::cout<<hitdata.poi<<std::endl;
-        hitdata.pIntensity =  localIntensity * localTransparency *  (reflectedIntensity * kr + refractedIntensity * (1.0 - kr));
+        //Vec3 minusDir = -ray.getRay();
+        //Vec3 reflectedVec = 2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir;
+        Ray reflectedRay;
+        ray.reflectRay(hitdata,reflectedRay);
+        bool ReflectedRecursion = castRay(reflectedRay,hitdata,depth-1);
+        reflectedIntensity = hitdata.pIntensity;
+        //std::cout<<hitdata.poi<<std::endl;
+        hitdata.pIntensity = hitdata.pIntensity *0.3;
+        hitdata.pIntensity +=  localIntensity * (1-localTransparency) + refractedIntensity*localTransparency; // (reflectedIntensity * kr + refractedIntensity * (1.0 - kr));
         return true;
     }
 
