@@ -15,7 +15,7 @@ class Scene{
     private:
         std::vector<std::shared_ptr<ObjectBase>> objects;
         std::vector<std::shared_ptr<LightBase>> lights;
-        bool fresnel(const Ray & incidentRay,const Vec3 & normal,double & kr) const;
+        bool fresnel(const Ray & incidentRay,const HitMemory & hitdata,double & kr) const;
     public:
         Scene();
         ~Scene() = default;

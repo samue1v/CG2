@@ -13,7 +13,7 @@ void Scene::build(){
     material1.shininess = 100;
     material1.type = refractive;
     material1.reflectiveIndex = 0.7;
-    material1.transparency = 0.3;
+    material1.transparency = 0.1;
     material1.refractIndex = 1.2;
     
     material2.kd = Vec3(0,0,0.7);
@@ -44,7 +44,7 @@ void Scene::build(){
     material5.ke = Vec3(0.7,0,0.5);
     material5.ka = Vec3(0.2,0,0.5);
     material5.shininess = 500;
-    material5.type = reflective;
+    material5.type = opaque;
     material5.reflectiveIndex = 0.6; 
 
     material6.kd = Vec3(0.7,0.7,0);
@@ -56,12 +56,12 @@ void Scene::build(){
     
 
     auto plane1 = std::make_shared<Plane>(Point3(1,0,-15),Vec3(0,0,1));
-    auto plane2 = std::make_shared<Plane>(Point3(1,-1,-15),Vec3(0,0,1));
+    auto plane2 = std::make_shared<Plane>(Point3(1,-1,-15),Vec3(0,1,0));
     plane1->__material = material5;
     plane2->__material = material5;
 
     auto sphere1 = std::make_shared<Sphere>(Point3(0,1,-5),1);
-    auto sphere2 = std::make_shared<Sphere>(Point3(-2,0,-5),1);
+    auto sphere2 = std::make_shared<Sphere>(Point3(0,0,-15),1);
     auto sphere3 = std::make_shared<Sphere>(Point3(2,0,-5),1);
     auto sphere4 = std::make_shared<Sphere>(Point3(0,-5001,0),5000);
     sphere1->__material = material1;
@@ -78,7 +78,7 @@ void Scene::build(){
     objects.push_back(plane2);
     objects.push_back(sphere1);
     objects.push_back(sphere2);
-    objects.push_back(sphere3);
+    //objects.push_back(sphere3);
     //objects.push_back(sphere4);
     lights.push_back(plight);
     lights.push_back(alight);
@@ -97,7 +97,7 @@ bool Scene::render(std::unique_ptr<uint8_t[]> & data){
     Point3 P0(0,0,0);
     HitMemory hitdata;
     bool foundSmth;
-    int recursionDepth = 2;
+    int recursionDepth = 3;
     for (int l = 0; l < SCREEN_W; l++) {
         double y = hj / 2 - dy / 2 - l * dy;
         for (int c = 0; c < SCREEN_H; c++) {
@@ -180,63 +180,41 @@ bool Scene::castRay(const Ray & ray, HitMemory & hitdata,int depth){
     
 
     else{
-        //assumindo kr para debugar a recursao
-        kr = 0.3;
-        //if(fresnel(ray,hitdata.poiNormal,kr)){
-            Ray refractedRay;
+        Ray reflectedRay;
+        Ray refractedRay;
+        if(fresnel(ray,hitdata,kr)){
+            
             ray.refractRay(hitdata,refractedRay);
             bool refractRecursion = castRay(refractedRay,hitdata,depth-1);
             refractedIntensity = hitdata.pIntensity;
-        //}
-        //Vec3 minusDir = -ray.getRay();
-        //Vec3 reflectedVec = 2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir;
-        Ray reflectedRay;
-        ray.reflectRay(hitdata,reflectedRay);
-        bool ReflectedRecursion = castRay(reflectedRay,hitdata,depth-1);
-        reflectedIntensity = hitdata.pIntensity;
+        }
+        else{
+            
+            ray.reflectRay(hitdata,reflectedRay);
+            bool ReflectedRecursion = castRay(reflectedRay,hitdata,depth-1);
+            reflectedIntensity = hitdata.pIntensity;
+        }
         //std::cout<<hitdata.poi<<std::endl;
-        hitdata.pIntensity = hitdata.pIntensity *0.3;
-        hitdata.pIntensity +=  localIntensity * (1-localTransparency) + refractedIntensity*localTransparency; // (reflectedIntensity * kr + refractedIntensity * (1.0 - kr));
+        //hitdata.pIntensity = hitdata.pIntensity *0.3;
+        hitdata.pIntensity =  refractedIntensity * (1-kr) + reflectedIntensity*kr; // (reflectedIntensity * kr + refractedIntensity * (1.0 - kr));
+        //hitdata.pIntensity = hitdata.pIntensity * localTransparency * localIntensity;
+        hitdata.pIntensity += localTransparency*localIntensity;
         return true;
     }
-
-    
-    
-    /*
-    else if(hitdata.material.reflective){
-        
-    }
-    */
-
-    /*
-    double localReflect = hitdata.material.reflectiviness;
-    if( localReflect <= 0 || hitdata.recursion_depth <= 0){
-        return true;
-    }
-    
-    Vec3 localContrib = hitdata.pIntensity * (1-localReflect);
-    Vec3 minusDir = -ray.getRay();
-    Vec3 reflectedVec = 2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir;
-    Ray reflectedRay(reflectedVec +hitdata.poi,hitdata.poi);
-
-    bool recursion = castRay(reflectedRay,hitdata);
-    */
-    //hitdata.pIntensity = hitdata.pIntensity*localReflect + localContrib; 
-
 
     return true;
 }
 
-bool Scene::fresnel(const Ray & incidentRay,const Vec3 & normal,double & kr) const{
-    double i_dot_n = dot(incidentRay.getUnitRay(),normal);
+bool Scene::fresnel(const Ray & incidentRay,const HitMemory & hitdata,double & kr) const{
+    double i_dot_n = dot(incidentRay.getUnitRay(),hitdata.poiNormal);
     double etaI = 1.0;
-    double etaT = incidentRay.getCurrentRefracIndex();
+    double etaT = hitdata.material.refractIndex;
     if(i_dot_n > 0){
         etaI = etaT;
         etaT = 1.0;
     }
 
-    double sinT = etaI/etaT * sqrt(std::max(0.0,1-sinT*sinT));
+    double sinT = etaI/etaT * sqrt(std::max(0.0,1-i_dot_n*i_dot_n));
     if(sinT>1.0){
         kr = 1.0;
         return false;
