@@ -16,7 +16,7 @@ bool Plane::computeIntersection(const Ray & ray, HitMemory & hitdata){
     Vec3 rayDir = ray.getUnitRay();
     double denom = dot(rayDir,__normal);
     
-    if(abs(denom) < 1e-20 ){
+    if(-denom < 1e-20 ){
       return false;
     }
     double t = dot(p_minuspi,__normal) / denom;

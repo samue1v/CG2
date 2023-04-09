@@ -11,6 +11,7 @@ CFLAGS = -std=c++17 -Ofast
 objects = main.o \
 			ray.o \
 			scene.o \
+			camera.o \
 			$(patsubst %.cpp,%.o,$(wildcard ./Objects/*.cpp)) \
 			$(patsubst %.cpp,%.o,$(wildcard ./Lights/*.cpp))
 					

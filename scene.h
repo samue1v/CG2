@@ -15,6 +15,7 @@ class Scene{
     private:
         std::vector<std::shared_ptr<ObjectBase>> objects;
         std::vector<std::shared_ptr<LightBase>> lights;
+        Camera camera;
         bool fresnel(const Ray & incidentRay,const HitMemory & hitdata,double & kr) const;
     public:
         Scene();

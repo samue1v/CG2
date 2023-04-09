@@ -5,8 +5,8 @@
 
 #define PI M_PI
 #define DOUBLE_INFINITY INFINITY
-#define SCREEN_W 600
-#define SCREEN_H 600
+#define SCREEN_W 640
+#define SCREEN_H 480
 #define WINDOW_WIDTH 60
 #define WINDOW_HEIGHT 60
 #define WINDOW_DISTANCE 20
