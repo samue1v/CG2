@@ -3,7 +3,7 @@
 
 Camera::Camera()
 {
-	
+	srand(time(0));
 	cameraPosition = Point3(0,0,-10);
 	cameraLookAt = Point3(0,0,0);
 	cameraUp = Point3(0,10,0);
@@ -138,10 +138,9 @@ bool Camera::generateRay(double proScreenX, double proScreenY, Ray &cameraRay)
 	cameraRay.setRay(screenWorldCoordinate - cameraPosition);
 	*/
 
-	double px = (2 * ( (proScreenX + 0.5)/ screenWidth ) - 1) * tan(fovAngle / 2 * M_PI / 180) * aspectRatio;
-	double py = (1 - 2* ((proScreenY + 0.5) / screenHeight)) * tan(fovAngle / 2 * M_PI / 180);
+	double px = (2 * ( (proScreenX + (double) rand()/RAND_MAX)/ screenWidth ) - 1) * tan(fovAngle / 2 * M_PI / 180) * aspectRatio;
+	double py = (1 - 2* ((proScreenY + (double) rand()/RAND_MAX) / screenHeight)) * tan(fovAngle / 2 * M_PI / 180);
 	Point3 canvasPoint(px,py,cameraDistance);
-	//std::cout<<canvasPoint<<std::endl;
 	cameraRay = Ray(canvasPoint,Point3(0,0,0));
 	cameraRay.setOrigin(canvasPoint);
 	

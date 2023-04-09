@@ -2,6 +2,7 @@
 #define SCENE_H
 #include <vector>
 #include <memory>
+#include <iomanip>
 #include "ray.h"
 #include "hitMemory.h"
 #include "camera.h"
@@ -9,6 +10,7 @@
 #include "Objects/plane.h"
 #include "Lights/pointLight.h"
 #include "Lights/ambientLight.h"
+
 
 class Scene{
 

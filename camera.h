@@ -1,5 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+#include <cstdlib>
+#include <time.h>
 #include "DataStructures/matrix.h"
 #include "ray.h"
 class Camera{

@@ -25,8 +25,18 @@ int main(){
     //std::cout<< m.det() <<"\n";
     */
    
-   Vec3 v(2,2,2);
-   v+= Vec3(1,1,1);
-   std::cout<<v;
+   std::vector<double> d = {0,1,2,3,4,5,6,7,8,9};
+   for(int i = 0;i<10;i++){
+        for (auto j : d){
+            std::cout<< j <<" ";
+        }
+        std::cout<<std::endl;
+        if(i % 2 == 0){
+            d.push_back(i);
+        }
+        else{
+            d.clear();
+        }
+   }
     
 }

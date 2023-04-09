@@ -7,9 +7,6 @@
 #define DOUBLE_INFINITY INFINITY
 #define SCREEN_W 640
 #define SCREEN_H 480
-#define WINDOW_WIDTH 60
-#define WINDOW_HEIGHT 60
-#define WINDOW_DISTANCE 20
 #define REALLY_SMALLF 1e-15f
 #define REALLY_SMALLD 1e-15
 #define MIN_DIST 1e-4;

@@ -2,6 +2,8 @@
 #include "Misc/global.h"
 #include "material.h"
 
+
+
 Scene::Scene(){}
 
 void Scene::build(){
@@ -171,45 +173,37 @@ void Scene::build(){
 }
 
 bool Scene::render(std::unique_ptr<uint8_t[]> & data){
-    //double wj = 1;
-    //double hj = 1;
-    //float canvasDistance = 1;
-    //float dx = wj / SCREEN_W;
-    //float dy = hj / SCREEN_H;
-    //Point3 P0 = camera.getPosition();
     Ray ray;
     HitMemory hitdata;
     bool foundSmth;
+    int sampleExp = 2e3;
     int recursionDepth = 3;
+    std::cout<<std::fixed;
+    std::cout<<std::setprecision(3);
     for (int c = 0; c < SCREEN_H; c++) {
-        //double y = hj / 2 - dy / 2 - l * dy;
         for (int l = 0; l < SCREEN_W; l++) {
-            //double x = -wj / 2 + dx / 2 + c * dx;
-            camera.generateRay(l,c,ray);
-            //Ray ray(canvasPoint,P0);
-            //ray.setOrigin(canvasPoint);
-
-            foundSmth = castRay(ray, hitdata, recursionDepth); 
+            
+            Vec3 intensitySum;
             int begin = (c*SCREEN_W + l)*3;
-            
-            if(foundSmth){
-                Vec3 intensities = hitdata.pIntensity;
-                if(intensities.x() > 1 || intensities.y() > 1 || intensities.z() > 1){
-                    intensities = normalize(intensities);
-                }
-                Vec3 colorRes = Vec3(255.0,255.0,255.0) * intensities;
-                data[begin] = uint8_t(colorRes.x());
-                data[begin+1] = uint8_t(colorRes.y());
-                data[begin+2] = uint8_t(colorRes.z());
-            }   
-            else{ 
-                data[begin] = uint8_t(0);
-                data[begin+1] = uint8_t(0);
-                data[begin+2] = uint8_t(0);
+            for(int s = 0; s < sampleExp; s++){
+                camera.generateRay(l,c,ray);//randomize here
+                foundSmth = castRay(ray, hitdata, recursionDepth); 
+                if(foundSmth){
+                    Vec3 intensities = hitdata.pIntensity;
+                    if(intensities.x() > 1 || intensities.y() > 1 || intensities.z() > 1){
+                        intensities = normalize(intensities);
+                    }
+                    intensitySum += intensities;
+                }   
             }
-            
+            std::cout<< "line: "<< l << " column: " << c << " intensity: " << intensitySum <<std::endl;
+            Vec3 colorRes = Vec3(255.0,255.0,255.0) * (intensitySum/(double)sampleExp);
+            data[begin] = uint8_t(colorRes.x());
+            data[begin+1] = uint8_t(colorRes.y());
+            data[begin+2] = uint8_t(colorRes.z());
         }
     }
+    std::cout<<"end"<<std::endl;
     return true;
 }
     
