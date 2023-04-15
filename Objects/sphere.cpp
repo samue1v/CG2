@@ -26,8 +26,8 @@ bool Sphere::computeIntersection(const Ray & ray, HitMemory & hitdata){
     double t2 = (-b - sqrt(discriminant)) / (2.0 * a);
 
     double local_t;
-    bool t1_cond = (t1>=1e-10 && t1<=1e10);
-    bool t2_cond = (t2>=1e-10 && t2<=1e10);
+    bool t1_cond = (t1>=1e-20 && t1<=1e20);
+    bool t2_cond = (t2>=1e-20 && t2<=1e20);
 
     if(!(t1_cond || t2_cond)) {
         return false;
@@ -42,10 +42,12 @@ bool Sphere::computeIntersection(const Ray & ray, HitMemory & hitdata){
         t1<t2 ? local_t = t1 : local_t = t2;
     }
 
-    Point3 poi = ray.getOrigin() + rayDir*local_t;
-    hitdata.poi = poi;
-    hitdata.closest_t = local_t;
-    hitdata.poiNormal = unit(poi - __center);
-    hitdata.material = __material;
+    if(local_t < hitdata.closest_t){
+        Point3 poi = ray.getOrigin() + rayDir*local_t;
+        hitdata.poi = poi;
+        hitdata.closest_t = local_t;
+        hitdata.poiNormal = unit(poi - __center);
+        hitdata.material = __material;
+    }
     return true;
 }

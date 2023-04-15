@@ -16,23 +16,23 @@ void Scene::build(){
     camera.setPosition(Point3(0,0,0));
     camera.setDistance(-1);
 
-    /*
+    
 
     Material material1 ,material2, material3, material4, material5, material6;
     material1.kd = Vec3(0.7,0,0);
     material1.ke = Vec3(0.7,0,0);
     material1.ka = Vec3(0.2,0,0);
-    material1.shininess = 100;
+    material1.shininess = 400;
     material1.type = refractive;
     material1.reflectiveIndex = 0.7;
-    material1.transparency = 0.1;
-    material1.refractIndex = 1.2;
+    material1.transparency = 0.9;
+    material1.refractIndex = 2.0;
     
     material2.kd = Vec3(0,0,0.7);
     material2.ke = Vec3(0,0,0.7);
     material2.ka = Vec3(0,0,0.2);
     material2.shininess = 500;
-    material2.type = materialType::reflective;
+    material2.type = opaque;
     material2.reflectiveIndex = 0.7;
 
     material3.kd = Vec3(0,0.7,0);
@@ -67,33 +67,35 @@ void Scene::build(){
     material6.reflectiveIndex = 0.6;  
     
 
-    auto plane1 = std::make_shared<Plane>(Point3(1,-1,-15),Vec3(0,0,1));
-    auto plane2 = std::make_shared<Plane>(Point3(1,-1,-15),Vec3(0,1,0));
-    //plane1->__material = material5;
+    auto plane1 = std::make_shared<Plane>(Point3(1,-1,-30),Vec3(0,0,1));
+    auto plane2 = std::make_shared<Plane>(Point3(1,-1,-30),Vec3(0,1,0));
+    plane1->__material = material5;
     plane2->__material = material4;
 
-    auto sphere1 = std::make_shared<Sphere>(Point3(0,1,-5),1);
-    auto sphere2 = std::make_shared<Sphere>(Point3(0,0,-15),1);
-    auto sphere3 = std::make_shared<Sphere>(Point3(2,0,-5),1);
+    auto sphere1 = std::make_shared<Sphere>(Point3(-2,1,-5),1);
+    auto sphere2 = std::make_shared<Sphere>(Point3(0,1,-3),1);
+    auto sphere3 = std::make_shared<Sphere>(Point3(0,0,-12),1);
     auto sphere4 = std::make_shared<Sphere>(Point3(0,-5001,0),5000);
-    sphere1->__material = material1;
-    sphere2->__material = material2;
+    sphere1->__material = material3;
+    sphere2->__material = material1;
     sphere3->__material = material3;
     sphere4->__material = material4;
 
     auto plight = std::make_shared<PointLight>(Point3(2,5,0),Vec3(1,1,1));
     auto alight = std::make_shared<AmbientLight>(Vec3(0.3,0.3,0.3));
+
+    objects.push_back(sphere1);
     objects.push_back(plane1);
     objects.push_back(plane2);
-    objects.push_back(sphere1);
-    //objects.push_back(sphere2);
-    objects.push_back(sphere3);
+    objects.push_back(sphere2);
+    //objects.push_back(sphere3);
+
     //objects.push_back(sphere4);
     lights.push_back(plight);
-    //lights.push_back(alight);
+    lights.push_back(alight);
     //std::cout<< material5.type<<std::endl;
-    */
-
+    
+    /*
    Material material1 ,material2, material3, material4, material5, material6;
     material1.kd = Vec3(0.7,0,0);
     material1.ke = Vec3(0.7,0,0);
@@ -170,14 +172,15 @@ void Scene::build(){
     lights.push_back(plight);
     lights.push_back(alight);
     //std::cout<< material5.type<<std::endl;
+    */
 }
 
 bool Scene::render(std::unique_ptr<uint8_t[]> & data){
     Ray ray;
     HitMemory hitdata;
     bool foundSmth;
-    int sampleExp = 2e3;
-    int recursionDepth = 3;
+    int sampleExp = 2e2 ;
+    int recursionDepth = 2;
     std::cout<<std::fixed;
     std::cout<<std::setprecision(3);
     for (int c = 0; c < SCREEN_H; c++) {
@@ -189,15 +192,17 @@ bool Scene::render(std::unique_ptr<uint8_t[]> & data){
                 camera.generateRay(l,c,ray);//randomize here
                 foundSmth = castRay(ray, hitdata, recursionDepth); 
                 if(foundSmth){
-                    Vec3 intensities = hitdata.pIntensity;
-                    if(intensities.x() > 1 || intensities.y() > 1 || intensities.z() > 1){
-                        intensities = normalize(intensities);
-                    }
-                    intensitySum += intensities;
+                    intensitySum += hitdata.pIntensity;
                 }   
             }
-            std::cout<< "line: "<< l << " column: " << c << " intensity: " << intensitySum <<std::endl;
-            Vec3 colorRes = Vec3(255.0,255.0,255.0) * (intensitySum/(double)sampleExp);
+            intensitySum = intensitySum / double(sampleExp);
+            
+            if(intensitySum.x() > 1 || intensitySum.y() > 1 || intensitySum.z() > 1){
+                intensitySum = normalize(intensitySum);
+            }
+            
+            Vec3 colorRes = Vec3(255.0,255.0,255.0) * intensitySum;
+            //std::cout<< "line: "<< l << " column: " << c << " intensity: " << colorRes <<std::endl;
             data[begin] = uint8_t(colorRes.x());
             data[begin+1] = uint8_t(colorRes.y());
             data[begin+2] = uint8_t(colorRes.z());
@@ -262,8 +267,12 @@ bool Scene::castRay(const Ray & ray, HitMemory & hitdata,int depth){
         if(fresnel(ray,hitdata,kr)){
             
             ray.refractRay(hitdata,refractedRay);
+            ray.reflectRay(hitdata,reflectedRay);
             bool refractRecursion = castRay(refractedRay,hitdata,depth-1);
             refractedIntensity = hitdata.pIntensity;
+            bool reflectRecursion = castRay(reflectedRay,hitdata,depth-1);
+            reflectedIntensity = hitdata.pIntensity;
+            
         }
         else{
             

@@ -20,7 +20,7 @@ bool Plane::computeIntersection(const Ray & ray, HitMemory & hitdata){
       return false;
     }
     double t = dot(p_minuspi,__normal) / denom;
-    if(t>=1e-10 && t<=1e10){
+    if(t>=1e-20 && t<=1e20 && hitdata.closest_t > t){
     	Point3 poi  = ray.getOrigin() + rayDir*t;
         hitdata.poi = poi;
         hitdata.closest_t = t;
