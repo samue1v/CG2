@@ -7,5 +7,6 @@ class HaltonSampler : public Sampler{
     HaltonSampler(int numSamples,int numChunks);
     Pair getSample();
     private:
-    double genSamples(int chunkIndex,int base);
+    double genSamples(int chunkIndex,int base,int baseIndex);
+    std::vector<std::vector<double>> perms;
 };

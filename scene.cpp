@@ -78,7 +78,7 @@ void Scene::build()
     material1.shininess = 400;
     material1.type = refractive;
     material1.transparency = 0.9;
-    material1.refractIndex = 2;
+    material1.refractIndex = 1.05;
 
     material2.kd = Vec3(0, 0, 0.7);
     material2.ke = Vec3(0, 0, 0.7);
@@ -120,7 +120,7 @@ void Scene::build()
     plane1->__material = material5;
     plane2->__material = material4;
 
-    auto sphere1 = std::make_shared<Sphere>(Point3(-2, 1, -5), 1);
+    auto sphere1 = std::make_shared<Sphere>(Point3(-1, 1, -5), 1);
     auto sphere2 = std::make_shared<Sphere>(Point3(0, 1, -3), 1);
     auto sphere3 = std::make_shared<Sphere>(Point3(0, 0, -12), 1);
     auto sphere4 = std::make_shared<Sphere>(Point3(0, -5001, 0), 5000);
@@ -228,7 +228,6 @@ bool Scene::render(std::unique_ptr<uint8_t[]> &data)
     Ray ray;
     HitMemory hitdata;
     bool foundSmth;
-    // int sampleExp = NUM_SAMPLES ;
     int recursionDepth = 3;
     std::cout << "Start.\n";
     std::cout << std::fixed;
