@@ -1,4 +1,5 @@
 #include "ambientLight.h"
+#include "../Materials/material.h"
 
 AmbientLight::AmbientLight(){}
 
@@ -14,7 +15,18 @@ Vec3 AmbientLight::getIntensity(){
     return __intensity;
 }
 
-bool AmbientLight::computeLightning(HitMemory & hitdata, const Ray & ray, const std::vector<std::shared_ptr<ObjectBase>> & objects){
-    hitdata.pIntensity += __intensity*hitdata.material.ka;
-    return true;
+Vec3 AmbientLight::getDirection(const HitMemory & hitmem){
+    return Vec3();
+}
+
+RGBcolor AmbientLight::L(HitMemory & hitmem){
+    return __intensity*ls;
+}
+
+double AmbientLight::G(const HitMemory & hitmem){
+    return 1;
+}
+
+double AmbientLight::pdf(const HitMemory & hitmem){
+    return 1;
 }

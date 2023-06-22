@@ -14,8 +14,8 @@ class Ray{
         Ray();
         ~Ray() = default;
         Ray(const Vec3 & dest, const Vec3 & origin);
-        bool refractRay(const HitMemory & hitdata, Ray & refractedRay) const;
-        bool reflectRay(const HitMemory & hitdata, Ray & reflectedRay) const;
+        //bool refractRay(const HitMemory & hitdata, Ray & refractedRay) const;
+        //bool reflectRay(const HitMemory & hitdata, Ray & reflectedRay) const;
         Vec3 getOrigin () const;
         void setOrigin(Vec3 origin);
         Vec3 getDest () const;

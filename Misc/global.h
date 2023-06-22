@@ -3,15 +3,19 @@
 #include <math.h>
 
 
-#define PI M_PI
-#define DOUBLE_INFINITY INFINITY
-#define SCREEN_W 640
-#define SCREEN_H 480
-#define REALLY_SMALLF 1e-15f
-#define REALLY_SMALLD 1e-15
-#define MIN_DIST 1e-4
-#define MAX_DIST 1e10
-#define NUM_SAMPLES 2e3
+const double PI = 3.1415926535897932384;
+const double TWO_PI = 6.2831853071795864769;
+const double INV_PI = 0.3183098861837906715;
+const double INV_TWO_PI = 0.1591549430918953358;
+const double DOUBLE_INFINITY = INFINITY;
+const int SCREEN_W = 640;
+const int SCREEN_H = 480;
+const double REALLY_SMALLF = 1e-15f;
+const double REALLY_SMALLD = 1e-15;
+const double MIN_DIST = 1e-4;
+const double MAX_DIST = 1e10;
+const int MAX_DEPTH = 3;
+const int NUM_SAMPLES = 2e3;
 
 
 const int primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 

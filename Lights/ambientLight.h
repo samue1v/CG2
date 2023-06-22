@@ -9,9 +9,12 @@ class AmbientLight : public LightBase{
         AmbientLight();
         AmbientLight(Vec3 intensity);
         ~AmbientLight() = default;
-        bool computeLightning(HitMemory & hitdata, const Ray & ray, const std::vector<std::shared_ptr<ObjectBase>> & objects);
         Vec3 getIntensity();
         void setIntensity(Vec3 intensity);
+        Vec3 getDirection(const HitMemory & hitmem);
+        double G(const HitMemory & hitmem);
+        double pdf(const HitMemory & hitmem);
+        RGBcolor L(HitMemory & hitmem);
 
 
 };

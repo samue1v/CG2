@@ -10,8 +10,11 @@ CFLAGS = -std=c++17 -Ofast
 # Define the object files that we need to use.
 objects = main.o \
 			ray.o \
-			scene.o \
 			camera.o \
+			$(patsubst %.cpp,%.o,$(wildcard ./BRDFs/*.cpp)) \
+			$(patsubst %.cpp,%.o,$(wildcard ./Materials/*.cpp)) \
+			$(patsubst %.cpp,%.o,$(wildcard ./Scene/*.cpp)) \
+			$(patsubst %.cpp,%.o,$(wildcard ./Tracers/*.cpp)) \
 			$(patsubst %.cpp,%.o,$(wildcard ./Samplers/*.cpp)) \
 			$(patsubst %.cpp,%.o,$(wildcard ./Objects/*.cpp)) \
 			$(patsubst %.cpp,%.o,$(wildcard ./Lights/*.cpp))

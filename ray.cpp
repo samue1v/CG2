@@ -51,6 +51,8 @@ void Ray::setCurrentRefracIndex(double currentRefracIndex){
     __currentRefracIndex = currentRefracIndex;
 }
 
+
+/*
 bool Ray::reflectRay(const HitMemory & hitdata,Ray & reflectedRay) const{
     Vec3 minusDir = -__unitRay;
     Vec3 reflectedVec = unit(2*hitdata.poiNormal*dot(hitdata.poiNormal,minusDir) - minusDir);
@@ -60,7 +62,7 @@ bool Ray::reflectRay(const HitMemory & hitdata,Ray & reflectedRay) const{
 
 bool Ray::refractRay(const HitMemory & hitdata, Ray & refractedRay) const{
     Vec3 refN = hitdata.poiNormal;
-    double etaT = hitdata.material.refractIndex;
+    double etaT = hitdata.material->refractIndex;
     //std::cout<<etaT<<std::endl;
     double etaI = 1.0;
     double i_dot_n = dot(__unitRay,hitdata.poiNormal);
@@ -70,7 +72,7 @@ bool Ray::refractRay(const HitMemory & hitdata, Ray & refractedRay) const{
     else{
         refN = hitdata.poiNormal * -1;
         etaT = 1.0;
-        etaI = hitdata.material.refractIndex;
+        etaI = hitdata.material->refractIndex;
     }
     double eta = etaI/etaT;
     double k = 1.0 - (eta*eta) * (1 - i_dot_n * i_dot_n);
@@ -81,3 +83,4 @@ bool Ray::refractRay(const HitMemory & hitdata, Ray & refractedRay) const{
     refractedRay = Ray(hitdata.poi +refractVec3Ray,hitdata.poi + refractVec3Ray*0.01);
     return true;
 }
+*/

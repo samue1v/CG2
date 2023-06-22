@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 #include "Misc/global.h"
-#include "scene.h"
+#include "Scene/scene.h"
 
 
 GLFWwindow* window;
@@ -78,7 +78,7 @@ int main(){
   std::unique_ptr<uint8_t[]> data(new uint8_t[SCREEN_W*SCREEN_H*3]);
   setGlfw();
   Scene scene;
-  scene.build();
+  scene.sceneBuild();
   scene.render(data);
   
   display(data);
