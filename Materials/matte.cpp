@@ -43,7 +43,7 @@ RGBcolor Matte::areaLightShade(HitMemory & hitmem){
             */
            Ray shadow_ray(hitmem.poi, wi);
 
-            if (hitmem.scene->lights[j]->inShadow(shadow_ray, hitmem)) {
+            if (!hitmem.scene->lights[j]->inShadow(shadow_ray, hitmem)) {
                 L += diffuse_brdf.f(hitmem, wo, wi) * hitmem.scene->lights[j]->L(hitmem) * hitmem.scene->lights[j]->G(hitmem) * ndotwi / hitmem.scene->lights[j]->pdf(hitmem);
             }
         }
@@ -54,5 +54,5 @@ RGBcolor Matte::areaLightShade(HitMemory & hitmem){
 
 
 RGBcolor Matte::getLe(HitMemory & hitmem) const{
-
+    return RGBcolor();
 }

@@ -15,8 +15,13 @@ class AmbientLight : public LightBase{
         double G(const HitMemory & hitmem);
         double pdf(const HitMemory & hitmem);
         RGBcolor L(HitMemory & hitmem);
+        bool inShadow(const Ray & ray, const HitMemory & hitmem);
 
 
 };
+
+void inline AmbientLight::setIntensity(Vec3 intensity){
+    __intensity = intensity;
+}
 
 #endif

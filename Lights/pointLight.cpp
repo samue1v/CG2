@@ -68,17 +68,13 @@ Vec3 PointLight::getIntensity(){
     return __intensity;
 }
 
-void PointLight::setIntensity(Vec3 intensity){
-    __intensity = intensity;
-}
+
 
 Point3 PointLight::getPosition(){
     return __position;
 }
 
-void PointLight::setPosition(Point3 position){
-    __position = position;
-}
+
 
 Vec3 PointLight::getDirection(const HitMemory & hitmem){
     return unit(__position - hitmem.poi);

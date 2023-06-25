@@ -21,5 +21,11 @@ class PointLight : public LightBase{
         void setIntensity(Vec3 intensity);
 
 };
+void inline PointLight::setPosition(Point3 position){
+    __position = position;
+}
 
+void inline PointLight::setIntensity(Vec3 intensity){
+    __intensity = intensity;
+}
 #endif

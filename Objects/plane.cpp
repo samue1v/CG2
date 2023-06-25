@@ -1,12 +1,12 @@
 #include "plane.h"
 
-Plane::Plane(){
+Plane::Plane() : ObjectBase(){
     __planePoint = Vec3(0,0,0);
 }
 
 Plane::~Plane(){}
 
-Plane::Plane(Point3 planePoint, Vec3 normal){
+Plane::Plane(Point3 planePoint, Vec3 normal) : ObjectBase(){
     __planePoint = planePoint;
     __normal = normal;
 }
@@ -29,4 +29,16 @@ bool Plane::computeIntersection(const Ray & ray, HitMemory & hitdata){
         return true;
     }
     return false;
+}
+
+Vec3 Plane::sample() const{
+    
+}
+
+double Plane::pdf(const HitMemory & hitmem) const{
+    return 0.0;
+}
+
+Vec3 Plane::getNormal(const Point3 p) const {
+    return __normal;
 }

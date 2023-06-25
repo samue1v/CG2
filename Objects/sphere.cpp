@@ -1,13 +1,15 @@
 #include "sphere.h"
 
-Sphere::Sphere(){
+Sphere::Sphere() : ObjectBase(){
     __radius = 1;
     __center = Point3(0,0,0);
+    __area = 0;
 }
 
-Sphere::Sphere(Point3 center, double radius){
+Sphere::Sphere(Point3 center, double radius) : ObjectBase(){
     __radius = radius;
     __center = center;
+    __area = 4.0*PI*radius*radius;//uniform
 }
 
 bool Sphere::computeIntersection(const Ray & ray, HitMemory & hitdata){
@@ -51,3 +53,14 @@ bool Sphere::computeIntersection(const Ray & ray, HitMemory & hitdata){
     }
     return true;
 }
+
+//uniform for instance
+double Sphere::pdf(const HitMemory & hitmem) const{
+    return 1.0/__area;
+}
+
+Vec3 Sphere::getNormal(const Point3 p) const{
+    return unit(p-__center);
+}
+
+

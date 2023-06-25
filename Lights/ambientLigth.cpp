@@ -7,9 +7,7 @@ AmbientLight::AmbientLight(Vec3 intensity){
     __intensity = intensity;
 }
 
-void AmbientLight::setIntensity(Vec3 intensity){
-    __intensity = intensity;
-}
+
 
 Vec3 AmbientLight::getIntensity(){
     return __intensity;
@@ -29,4 +27,8 @@ double AmbientLight::G(const HitMemory & hitmem){
 
 double AmbientLight::pdf(const HitMemory & hitmem){
     return 1;
+}
+
+bool AmbientLight::inShadow(const Ray & ray, const HitMemory & hitmem){
+    return false;
 }

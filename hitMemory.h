@@ -9,7 +9,11 @@ class Material;
 
 class HitMemory{
     public:
-        HitMemory(){}
+        HitMemory(){closest_t = DOUBLE_INFINITY;
+                    depth = 0;
+                    material =nullptr;
+                    scene = nullptr;
+                    }
         double closest_t;
         int depth;
         Point3 poi;
