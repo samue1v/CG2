@@ -1,4 +1,5 @@
 #include "sphere.h"
+#include "../Samplers/sampler.h"
 
 Sphere::Sphere() : ObjectBase(){
     __radius = 1;
@@ -61,6 +62,16 @@ double Sphere::pdf(const HitMemory & hitmem) const{
 
 Vec3 Sphere::getNormal(const Point3 p) const{
     return unit(p-__center);
+}
+
+Vec3 Sphere::sample() const{
+    Vec3 w = Vec3(0,1,0);
+    Vec3 v = cross(Vec3(0.0034, 1.0, 0.0071),w);
+    v = unit(v);
+    Vec3 u = cross(v,w);
+    Vec3 sample = __sampler->sampleSphere();
+    Vec3 dir =  sample.x()*u + sample.y()*v + sample.z()*w;
+    return __center+(dir*__radius);
 }
 
 

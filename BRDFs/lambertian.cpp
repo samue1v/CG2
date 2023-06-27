@@ -1,11 +1,11 @@
 #include "lambertian.h"
 
-Lambertian::Lambertian() : kd(0),cd(Vec3()),BRDF(){}
+Lambertian::Lambertian() : __kd(0),__cd(Vec3()),__ka(0),BRDF(){}
 
-Lambertian::Lambertian(RGBcolor cd,double kd,std::shared_ptr<Sampler> sampler) : kd(kd),cd(cd),BRDF(sampler){}
+Lambertian::Lambertian(RGBcolor cd,double kd,std::shared_ptr<Sampler> sampler) : __ka(0),__kd(kd),__cd(cd),BRDF(sampler){}
 
 RGBcolor Lambertian::f(const HitMemory & hitmem,const Vec3 & wo,const Vec3 & wi) const{
-    return kd*cd*INV_PI;
+    return __kd*__cd*INV_PI;
 }
 
 RGBcolor Lambertian::sample_f(const HitMemory & hitmem, const Vec3 & wo, Vec3 & wi ) const {
@@ -17,7 +17,7 @@ RGBcolor Lambertian::sample_f(const HitMemory & hitmem, const Vec3 & wo, Vec3 & 
     Point3 sp = __sampler->sampleHemisphere();
     wi = sp.x()*u + sp.y()*v + sp.z()*w;
     wi = unit(wi);
-    return kd * cd * INV_PI;
+    return __kd * __cd * INV_PI;
 
 }
 
@@ -31,10 +31,10 @@ RGBcolor Lambertian::sample_f(const HitMemory & hitmem, const Vec3 & wo, Vec3 & 
     wi = sp.x()*u + sp.y()*v + sp.z()*w;
     wi = unit(wi);
     pdf = dot(hitmem.poiNormal,wi) * INV_PI;
-    return kd * cd * INV_PI;
+    return __kd * __cd * INV_PI;
 
 }
 
 RGBcolor Lambertian::rho(const HitMemory& hitmem, const Vec3 & wo) const{
-    return kd*cd;
+    return __kd*__cd;
 }

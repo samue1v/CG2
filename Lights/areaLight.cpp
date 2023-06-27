@@ -15,12 +15,17 @@ bool AreaLight::inShadow(const Ray & ray,const HitMemory & hitmem){
  HitMemory tempHitData;
     double pointsDistance = (currentSamplePoint - hitmem.poi).len();
     tempHitData.closest_t = DOUBLE_INFINITY;
-    bool hasIntersection;
+    bool hasIntersection = false;
     for (auto obj : hitmem.scene->objects){
+        if(obj == __object){continue;}
+        
         hasIntersection = obj->computeIntersection(ray,tempHitData);
         if(hasIntersection){
+    
             double tempPointsDistance = (hitmem.poi - tempHitData.poi).len();
             if(tempPointsDistance < pointsDistance){
+                std::cout<<"sombra\n"<<std::endl;
+                exit(-1);
                 return true;
             }
         }
@@ -30,6 +35,9 @@ bool AreaLight::inShadow(const Ray & ray,const HitMemory & hitmem){
 
 Vec3 AreaLight::getDirection(const HitMemory & hitmem){
     Vec3 sample = __object->sample();
+    currentNormal = __object->getNormal(sample);
+    currentWi = unit(sample - hitmem.poi);
+    return currentWi;
 }
 
 //lembra de fazer

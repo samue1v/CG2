@@ -1,5 +1,5 @@
 #include "lightBase.h"
-#include "material.h"
+#include "../Materials/material.h"
 class ObjectBase;
 
 class AreaLight : public LightBase{

@@ -9,16 +9,23 @@ RGBcolor Matte::shade(HitMemory & hitmem){
     if (hitmem.depth == 0) {
         L = areaLightShade(hitmem);
     }
-
+    //std::cout<<L;
+    //std::cout<<"terminei o area shade!\n";
     Vec3 wi;
     Vec3 wo = -hitmem.rayDir;
     double pdf;
+    
     RGBcolor f = diffuse_brdf.sample_f(hitmem, wo, wi, pdf);
+    //std::cout<<"terminei a brdf!\n";
     double ndotwi = dot(hitmem.poiNormal, wi);
     Ray reflected_ray(wi + hitmem.poi, hitmem.poi + wi*0.01);
-
-    L += f * hitmem.scene->tracer->traceRay(reflected_ray, hitmem.depth + 1) * ndotwi / pdf;
-
+    //std::cout<<"Antes de chamr traceray\n";
+   //->__scene->objects[0]->getNormal(Vec3())<<std::endl;
+    //std::cout<<(hitmem.scene == nullptr)<<std::endl;
+    //std::cout<<"depois do teste\n";
+    //std::cout<<L;
+    //L += f * hitmem.scene->__tracer->traceRay(reflected_ray, hitmem.depth + 1) * ndotwi / pdf;
+    
     return L;
 }
 
@@ -31,8 +38,8 @@ RGBcolor Matte::areaLightShade(HitMemory & hitmem){
     for (int j = 0; j < num_lights; j++) {
         Vec3 wi = hitmem.scene->lights[j]->getDirection(hitmem);
         double ndotwi = dot(hitmem.poiNormal,wi);
-
         if (ndotwi > 0.0) {
+            //std::cout<<ndotwi<<std::endl;
             //bool in_shadow = false;
 
             /*Used for internal refraction, not useful yet
@@ -41,13 +48,17 @@ RGBcolor Matte::areaLightShade(HitMemory & hitmem){
                 in_shadow = sr.w.lights[j]->in_shadow(shadow_ray, sr);
             }
             */
-           Ray shadow_ray(hitmem.poi, wi);
-
+            Ray shadow_ray(hitmem.poi + wi,hitmem.poi + wi*0.1);
             if (!hitmem.scene->lights[j]->inShadow(shadow_ray, hitmem)) {
                 L += diffuse_brdf.f(hitmem, wo, wi) * hitmem.scene->lights[j]->L(hitmem) * hitmem.scene->lights[j]->G(hitmem) * ndotwi / hitmem.scene->lights[j]->pdf(hitmem);
             }
+            else{
+                std::cout<<"fodac\n";
+                exit(-1);
+            }
         }
     }
+    
 
     return L;
 }

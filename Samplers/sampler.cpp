@@ -65,3 +65,15 @@ Vec3 Sampler::sampleHemisphere(const double cosExp){
     double pw = cos_theta;
     return Vec3(pu,pv,pw);
 }
+
+Vec2 Sampler::sampleSquare(){
+    return getRandomSample();
+}
+
+Vec3 Sampler::sampleSphere(){
+    Vec2 sample = getRandomSample();
+    double z = 1.0 - 2.0 * sample.x();
+    double r = sqrt(std::max(0.0, 1.0 - z * z));
+    double phi = 2.0 * PI * sample.y();
+    return Vec3(r * cos(phi), r * sin(phi), z);
+}

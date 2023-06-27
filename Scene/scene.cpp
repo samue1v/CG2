@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "../Misc/global.h"
+#include "../Tracers/tracer.h"
 
 Scene::Scene() {}
 
@@ -7,8 +8,8 @@ Scene::Scene() {}
 bool Scene::render(std::unique_ptr<uint8_t[]> &data)
 {
     Ray ray;
-    HitMemory hitdata;
-    bool foundSmth;
+    //HitMemory hitdata;
+    //bool foundSmth;
     //int MAX_DEPTH = 3;
     std::cout << "Start.\n";
     std::cout << std::fixed;
@@ -23,13 +24,14 @@ bool Scene::render(std::unique_ptr<uint8_t[]> &data)
             for (int s = 0; s < NUM_SAMPLES; s++)
             {
                 camera.generateRay(l, c, ray); // randomize here
-                foundSmth = true;//castRay(ray, hitdata, MAX_DEPTH);
-                if (foundSmth)
-                {
-                    intensitySum += hitdata.pIntensity;
-                }
+                //foundSmth = true;//castRay(ray, hitdata, MAX_DEPTH);
+                //if (foundSmth)
+                //{
+                intensitySum += __tracer->traceRay(ray,0);
+                //}
             }
             intensitySum = intensitySum / double(NUM_SAMPLES);
+            //if(intensitySum.x() == 0 && intensitySum.y() == 0 && intensitySum.z() == 0){std::cout<<"sdjmklad\n";exit(-1);}
 
             if (intensitySum.x() > 1 || intensitySum.y() > 1 || intensitySum.z() > 1)
             {
@@ -53,8 +55,11 @@ bool Scene::objHit(const Ray &ray, HitMemory &hitdata)
     hitdata.pIntensity = Vec3(0, 0, 0);
     bool objIntersect = false;
 
+    //std::cout<<objects.size()<<std::endl;]
+
     for (auto obj : objects)
     {
+        
         if (obj->computeIntersection(ray, hitdata))
         {
             objIntersect = true;

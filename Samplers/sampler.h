@@ -20,6 +20,10 @@ class Sampler{
 
     Vec3 sampleHemisphere(const double cosExp);
 
+    Vec3 sampleSphere();
+
+    Vec2 sampleSquare();
+
     virtual ~Sampler();
     
     virtual Pair getSample() = 0;

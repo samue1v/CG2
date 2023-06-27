@@ -1,5 +1,5 @@
 #include "rectangle.h"
-
+#include "../Samplers/sampler.h"
 Rectangle::Rectangle() : ObjectBase(){
     __p0 = Vec3();
     __l1 = Vec3();
@@ -42,6 +42,7 @@ bool Rectangle::computeIntersection(const Ray & ray, HitMemory & hitmem){
     } 
     hitmem.poiNormal = __normal;
     hitmem.poi = poi;
+    hitmem.material = __material;
     return true;
 }
 
@@ -54,7 +55,10 @@ double Rectangle::pdf(const HitMemory & hitmem) const{
 }
 
 Vec3 Rectangle::sample() const{
-    
+    Vec2 sample = __sampler->sampleSquare();
+    //std::cout<<__p0 + __l1*sample.x() + __l2*sample.y()<<std::endl;
+    //exit(-1);
+    return __p0 + __l1*sample.x() + __l2*sample.y();
 }
 
 

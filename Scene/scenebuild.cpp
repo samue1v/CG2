@@ -1,14 +1,54 @@
 #include "scene.h"
+#include "../Tracers/pathTracer.h"
 #include "../Materials/matte.h"
+#include "../Materials/emissive.h"
 #include "../camera.h"
 #include "../Objects/sphere.h"
 #include "../Objects/plane.h"
+#include "../Objects/rectangle.h"
 #include "../Lights/pointLight.h"
 #include "../Lights/ambientLight.h"
+#include "../Lights/areaLight.h"
 
 void Scene::sceneBuild(){
+    //Samplers construction
     std::shared_ptr<Sampler> hs = std::make_shared<HaltonSampler>(NUM_CHUNKS, NUM_SAMPLES);
-    std::shared_ptr<Sampler> pr = std::make_shared<PureRandom>();
+    std::shared_ptr<Sampler> pr = std::make_shared<PureRandom>(NUM_CHUNKS, NUM_SAMPLES);
+
+    //Materials constructor
+    std::shared_ptr<Matte> matte1 = std::make_shared<Matte>();
+    matte1->setcd(Vec3(0.41,0.08,0.56));
+    matte1->setkd(10);
+    matte1->setSampler(pr);
+
+    std::shared_ptr<Emissive> emissionmat = std::make_shared<Emissive>();
+    emissionmat->setce(RGBcolor(1,1,1));
+    emissionmat->setls(10);
+
+    //rectangle light
+    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(-1,1,-2),Vec3(-1,0,0),Vec3(0,1,0));
+    rect->setMaterial(emissionmat);
+    rect->setSampler(pr);
+    objects.push_back(rect);
+
+    std::shared_ptr<AreaLight> rectlight = std::make_shared<AreaLight>();
+    rectlight->setMaterial(emissionmat);
+    rectlight->setObject(rect);
+
+    lights.push_back(rectlight);
+
+
+    //Plane definition
+    std::shared_ptr<Plane> plane1 = std::make_shared<Plane>(Vec3(0.3,-0.5,-4),Vec3(0.3,0,1));
+    plane1->setMaterial(matte1);
+
+    objects.push_back(plane1);
+
+
+
+
+    
+    
 
     camera.setWidth(SCREEN_W);
     camera.setHeight(SCREEN_H);
@@ -16,7 +56,17 @@ void Scene::sceneBuild(){
     camera.setFovAngle(90);
     camera.setPosition(Point3(0, 0, 0));
     camera.setDistance(-1);
-    camera.setSampler(hs);
+    camera.setSampler(pr);
+
+    //Tracer constructor
+    __tracer = std::make_shared<PathTracer>();
+    __tracer->__scene = std::make_shared<Scene>(*this);
+
+
+    //std::cout<<(__tracer->__scene->objects[0]->getNormal(Vec3())) <<std::endl;
+    //exit(-1);
+    //std::cout<<tracer->__scene->objects[0]->getNormal(Vec3())<<std::endl;
+    //exit(-1);
 
     /*
     //teste paulo

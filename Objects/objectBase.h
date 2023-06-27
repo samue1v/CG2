@@ -3,6 +3,7 @@
 
 #include "../hitMemory.h"
 #include "../ray.h"
+#include "../DataStructures/vec2.h"
 
 class Material;
 class Sampler;

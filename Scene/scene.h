@@ -17,7 +17,7 @@ class Scene{
     public:
         std::vector<std::shared_ptr<ObjectBase>> objects;
         std::vector<std::shared_ptr<LightBase>> lights;
-        std::shared_ptr<Tracer> tracer;
+        std::shared_ptr<Tracer> __tracer;
         Camera camera;
         
         
