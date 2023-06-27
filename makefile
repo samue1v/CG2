@@ -5,7 +5,7 @@ linkTarget = program
 LIBS = -lSDL2 -lSDL2_image -lglfw -lGL -lGLU
 
 # Define any flags.
-CFLAGS = -std=c++17 -Ofast
+CFLAGS = -std=c++17 -Ofast -g
 
 # Define the object files that we need to use.
 objects = main.o \

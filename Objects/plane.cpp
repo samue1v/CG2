@@ -14,19 +14,20 @@ Plane::Plane(Point3 planePoint, Vec3 normal) : ObjectBase(){
 bool Plane::computeIntersection(const Ray & ray, HitMemory & hitdata){
     Vec3 p_minuspi = __planePoint - ray.getOrigin();
     Vec3 rayDir = ray.getUnitRay();
-    std::cout<<"raydir no plano: "<<rayDir;
+    //std::cout<<"raydir no plano: "<<rayDir;
     //std::cout<<rayDir;
     //Vec3 minusraydir = -rayDir;
     double denom = dot(rayDir,__normal);
     //std::cout<<denom<<std::endl;
     
     if((-denom) < 1e-10){
+        //std::cout<<"sai\n";
       return false;
     }
     double t = dot(p_minuspi,__normal) / denom;
     if(hitdata.closest_t < t){
-        std::cout<<"dada!\n";
-        exit(-1);
+        //std::cout<<"dada!\n";
+        //exit(-1);
     }
     if(t>=1e-20 && t<=1e20 && hitdata.closest_t > t){
     	Point3 poi  = ray.getOrigin() + rayDir*t;
@@ -38,6 +39,7 @@ bool Plane::computeIntersection(const Ray & ray, HitMemory & hitdata){
         return true;
     }
      //std::cout<<"sem intersecção\n";
+     //std::cout<<"sai\n";
     return false;
 }
 

@@ -14,22 +14,28 @@ void Scene::sceneBuild(){
     //Samplers construction
     std::shared_ptr<Sampler> hs = std::make_shared<HaltonSampler>(NUM_CHUNKS, NUM_SAMPLES);
     std::shared_ptr<Sampler> pr = std::make_shared<PureRandom>(NUM_CHUNKS, NUM_SAMPLES);
+    std::shared_ptr<Sampler> pr2 = std::make_shared<PureRandom>(NUM_CHUNKS, NUM_SAMPLES);
 
     //Materials constructor
     std::shared_ptr<Matte> matte1 = std::make_shared<Matte>();
     matte1->setcd(Vec3(0.41,0.08,0.56));
     matte1->setkd(10);
-    matte1->setSampler(pr);
+    matte1->setSampler(hs);
+
+    std::shared_ptr<Matte> matte2 = std::make_shared<Matte>();
+    matte2->setcd(Vec3(1,1,0));
+    matte2->setkd(10);
+    matte2->setSampler(hs);
 
     std::shared_ptr<Emissive> emissionmat = std::make_shared<Emissive>();
     emissionmat->setce(RGBcolor(1,1,1));
     emissionmat->setls(10);
 
     //rectangle light
-    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(-1,1,-2),Vec3(-1,0,0),Vec3(0,1,0));
+    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(-1,1,-2),Vec3(-1,0,0),Vec3(0,0,-1));
     rect->setMaterial(emissionmat);
-    rect->setSampler(pr);
-    objects.push_back(rect);
+    rect->setSampler(hs);
+    
 
     std::shared_ptr<AreaLight> rectlight = std::make_shared<AreaLight>();
     rectlight->setMaterial(emissionmat);
@@ -39,11 +45,16 @@ void Scene::sceneBuild(){
 
 
     //Plane definition
-    std::shared_ptr<Plane> plane1 = std::make_shared<Plane>(Vec3(0.3,-0.5,-4),Vec3(0.3,0,1));
+    std::shared_ptr<Plane> plane1 = std::make_shared<Plane>(Vec3(0.3,-1.5,-4),Vec3(0,1,0));
     plane1->setMaterial(matte1);
 
     objects.push_back(plane1);
 
+    std::shared_ptr<Plane> plane2 = std::make_shared<Plane>(Vec3(0.3,4,-7),Vec3(0,-1,0));
+    plane2->setMaterial(matte2);
+
+    objects.push_back(rect);
+    objects.push_back(plane2);
 
 
 
@@ -56,7 +67,7 @@ void Scene::sceneBuild(){
     camera.setFovAngle(90);
     camera.setPosition(Point3(0, 0, 0));
     camera.setDistance(-1);
-    camera.setSampler(pr);
+    camera.setSampler(hs);
 
     //Tracer constructor
     __tracer = std::make_shared<PathTracer>();

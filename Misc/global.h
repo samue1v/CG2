@@ -15,7 +15,7 @@ const double REALLY_SMALLD = 1e-15;
 const double MIN_DIST = 1e-4;
 const double MAX_DIST = 1e10;
 const int MAX_DEPTH = 1;
-const int NUM_SAMPLES = 1;
+const int NUM_SAMPLES = 8;
 
 
 const int primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 

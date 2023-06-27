@@ -24,8 +24,8 @@ bool AreaLight::inShadow(const Ray & ray,const HitMemory & hitmem){
     
             double tempPointsDistance = (hitmem.poi - tempHitData.poi).len();
             if(tempPointsDistance < pointsDistance){
-                std::cout<<"sombra\n"<<std::endl;
-                exit(-1);
+                //std::cout<<"sombra\n"<<std::endl;
+                //exit(-1);
                 return true;
             }
         }

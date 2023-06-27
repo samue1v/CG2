@@ -21,12 +21,14 @@ Sampler::Sampler(int numChunks,int numSamples){
     __indexChunk2 = 1;
     __randIndex = 0;
     __mt = std::mt19937(__rd()); 
-    __dis = std::uniform_real_distribution<>(0.0,1.0);
+    __dis = std::uniform_real_distribution<double>(0.0,1.0);
     __vector_samples = std::vector<std::vector<double>>(__numChunks,std::vector<double>(__numSamples,0));
     __random_vector.reserve(__numChunks*__numSamples);
     __random_vector.resize(__numChunks*__numSamples);
     for(int i = 0; i<__numChunks*__numSamples;i++){
-        __random_vector.push_back(Point2(getRandomNumber(),getRandomNumber()));
+        Point2 p = Point2(getRandomNumber(),getRandomNumber());
+        //std::cout<< p;
+        __random_vector[i] = p;
     }
 }
 
@@ -37,7 +39,8 @@ double Sampler::getRandomNumber(){
 }
 
 Vec2 Sampler::getRandomSample(){
-    return __random_vector[(__randIndex++) % __random_vector.size()];
+    //std::cout<<__randIndex<<std::endl;
+    return __random_vector[++(__randIndex) % __random_vector.size()];
 }
 
 //remember that its not a cossine distributed sample, only work for perfct diffuse surfaces, otherwise exponent 

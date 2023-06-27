@@ -25,7 +25,7 @@ RGBcolor PathTracer::traceRay(const Ray & ray, int depth){
         return RGBcolor();
     }
     //deve apenas procurar por interseções nos objetos
-    std::cout<<"raydir no tracer: " <<  ray.getUnitRay();
+    //std::cout<<"raydir no tracer: " <<  ray.getUnitRay();
     if(__scene->objHit(ray,hitmem)){
         //std::cout<<"achei algum objeto\n";
         hitmem.depth = depth;

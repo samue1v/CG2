@@ -24,7 +24,7 @@ RGBcolor Matte::shade(HitMemory & hitmem){
     //std::cout<<(hitmem.scene == nullptr)<<std::endl;
     //std::cout<<"depois do teste\n";
     //std::cout<<L;
-    //L += f * hitmem.scene->__tracer->traceRay(reflected_ray, hitmem.depth + 1) * ndotwi / pdf;
+    L += f * hitmem.scene->__tracer->traceRay(reflected_ray, hitmem.depth + 1) * ndotwi / pdf;
     
     return L;
 }
@@ -36,31 +36,33 @@ RGBcolor Matte::areaLightShade(HitMemory & hitmem){
     int num_lights = hitmem.scene->lights.size();
 
     for (int j = 0; j < num_lights; j++) {
-        Vec3 wi = hitmem.scene->lights[j]->getDirection(hitmem);
-        double ndotwi = dot(hitmem.poiNormal,wi);
-        if (ndotwi > 0.0) {
-            //std::cout<<ndotwi<<std::endl;
-            //bool in_shadow = false;
+        for(int i = 0;i<NUM_SAMPLES;i++){
+            Vec3 wi = hitmem.scene->lights[j]->getDirection(hitmem);
+            double ndotwi = dot(hitmem.poiNormal,wi);
+            if (ndotwi > 0.0) {
+                //std::cout<<ndotwi<<std::endl;
+                //bool in_shadow = false;
 
-            /*Used for internal refraction, not useful yet
-            if (sr.w.lights[j]->casts_shadows()) {
-                Ray shadow_ray(sr.hit_point, wi);
-                in_shadow = sr.w.lights[j]->in_shadow(shadow_ray, sr);
-            }
-            */
-            Ray shadow_ray(hitmem.poi + wi,hitmem.poi + wi*0.1);
-            if (!hitmem.scene->lights[j]->inShadow(shadow_ray, hitmem)) {
-                L += diffuse_brdf.f(hitmem, wo, wi) * hitmem.scene->lights[j]->L(hitmem) * hitmem.scene->lights[j]->G(hitmem) * ndotwi / hitmem.scene->lights[j]->pdf(hitmem);
-            }
-            else{
-                std::cout<<"fodac\n";
-                exit(-1);
+                /*Used for internal refraction, not useful yet
+                if (sr.w.lights[j]->casts_shadows()) {
+                    Ray shadow_ray(sr.hit_point, wi);
+                    in_shadow = sr.w.lights[j]->in_shadow(shadow_ray, sr);
+                }
+                */
+                Ray shadow_ray(hitmem.poi + wi,hitmem.poi + wi*0.1);
+                if (!hitmem.scene->lights[j]->inShadow(shadow_ray, hitmem)) {
+                    L += diffuse_brdf.f(hitmem, wo, wi) * hitmem.scene->lights[j]->L(hitmem) * hitmem.scene->lights[j]->G(hitmem) * ndotwi / hitmem.scene->lights[j]->pdf(hitmem);
+                }
+                else{
+                    //std::cout<<"fodac\n";
+                    //exit(-1);
+                }
             }
         }
     }
     
 
-    return L;
+    return L/(double)NUM_SAMPLES;
 }
 
 

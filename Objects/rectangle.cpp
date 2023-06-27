@@ -23,7 +23,7 @@ bool Rectangle::computeIntersection(const Ray & ray, HitMemory & hitmem){
     Vec3 rayDir = ray.getUnitRay();
     double denom = dot(rayDir,__normal);
     
-    if(-denom < 1e-20 ){
+    if(-denom < 1e-10 ){
       return false;
     }
     double t = dot(p_minuspi,__normal) / denom;
@@ -40,9 +40,13 @@ bool Rectangle::computeIntersection(const Ray & ray, HitMemory & hitmem){
     if(ddotl2 < 0 || ddotl2 > dot(__l2,__l2)){
         return false;
     } 
+    if(t>hitmem.closest_t){
+        return false;
+    }
     hitmem.poiNormal = __normal;
     hitmem.poi = poi;
     hitmem.material = __material;
+    hitmem.closest_t = t;
     return true;
 }
 
@@ -55,9 +59,11 @@ double Rectangle::pdf(const HitMemory & hitmem) const{
 }
 
 Vec3 Rectangle::sample() const{
-    Vec2 sample = __sampler->sampleSquare();
+    Vec2 sample = __sampler->getSample();
     //std::cout<<__p0 + __l1*sample.x() + __l2*sample.y()<<std::endl;
     //exit(-1);
+    //return __p0 + __l1*0.5 /*sample.x()*/ + __l2*0.5 /*sample.y()*/;
+    //std::cout<<sample;
     return __p0 + __l1*sample.x() + __l2*sample.y();
 }
 
