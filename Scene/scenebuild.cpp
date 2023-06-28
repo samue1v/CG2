@@ -18,21 +18,47 @@ void Scene::sceneBuild(){
 
     //Materials constructor
     std::shared_ptr<Matte> matte1 = std::make_shared<Matte>();
-    matte1->setcd(Vec3(0.41,0.08,0.56));
-    matte1->setkd(10);
+    //matte1->setcd(Vec3(0.41,0.08,0.56));
+    matte1->setcd(Vec3(1,1,1));
+    matte1->setkd(1);
     matte1->setSampler(hs);
 
     std::shared_ptr<Matte> matte2 = std::make_shared<Matte>();
     matte2->setcd(Vec3(1,1,0));
-    matte2->setkd(10);
+    matte2->setkd(1);
     matte2->setSampler(hs);
+
+    std::shared_ptr<Matte> matte3 = std::make_shared<Matte>();
+    matte3->setcd(Vec3(1,1,1));
+    matte3->setkd(1);
+    matte3->setSampler(hs);
+
+    std::shared_ptr<Matte> matte4 = std::make_shared<Matte>();
+    matte4->setcd(Vec3(1,1,1));
+    matte4->setkd(1);
+    matte4->setSampler(hs);
+
+
+    std::shared_ptr<Matte> matte5 = std::make_shared<Matte>();
+    matte5->setcd(Vec3(1,1,1));
+    matte5->setkd(1);
+    matte5->setSampler(hs);
+
+    std::shared_ptr<Matte> matte6 = std::make_shared<Matte>();
+    matte6->setcd(Vec3(1,1,1));
+    matte6->setkd(1);
+    matte6->setSampler(hs);
 
     std::shared_ptr<Emissive> emissionmat = std::make_shared<Emissive>();
     emissionmat->setce(RGBcolor(1,1,1));
-    emissionmat->setls(10);
+    emissionmat->setls(1);
 
     //rectangle light
-    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(-1,1,-2),Vec3(-1,0,0),Vec3(0,0,-1));
+    //std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(-0.75,0.5,-1.25),Vec3(0,0,-0.5),Vec3(0.5,0,0));
+    //rect->setMaterial(emissionmat);
+    //rect->setSampler(hs);
+
+    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(0.75,0.3,-1.2),Vec3(-1.5,0,0),Vec3(0,0,-1.5));
     rect->setMaterial(emissionmat);
     rect->setSampler(hs);
     
@@ -45,29 +71,74 @@ void Scene::sceneBuild(){
 
 
     //Plane definition
-    std::shared_ptr<Plane> plane1 = std::make_shared<Plane>(Vec3(0.3,-1.5,-4),Vec3(0,1,0));
-    plane1->setMaterial(matte1);
+    //std::shared_ptr<Plane> plane1 = std::make_shared<Plane>(Vec3(0.3,-1.5,-4),Vec3(0,1,0));
+    //plane1->setMaterial(matte1);
 
-    objects.push_back(plane1);
+    //objects.push_back(plane1);
 
-    std::shared_ptr<Plane> plane2 = std::make_shared<Plane>(Vec3(0.3,4,-7),Vec3(0,-1,0));
-    plane2->setMaterial(matte2);
+    //std::shared_ptr<Plane> plane2 = std::make_shared<Plane>(Vec3(0.3,4,-7),Vec3(0,-1,0));
+    //plane2->setMaterial(matte2);
 
+    //objects.push_back(rect);
+    //objects.push_back(plane2);
+
+
+    std::shared_ptr<Rectangle> floor = std::make_shared<Rectangle>(Point3(1,-1,-0.7),Vec3(0,0,-2),Vec3(-2,0,0));
+    floor->setMaterial(matte1);
+    floor->setSampler(hs);
+
+    std::shared_ptr<Rectangle> ceil = std::make_shared<Rectangle>(Point3(-1,1,-0.7),Vec3(0,0,-2),Vec3(2,0,0));
+    ceil->setMaterial(matte2);
+    ceil->setSampler(hs);
+
+    std::shared_ptr<Rectangle> wallleft = std::make_shared<Rectangle>(Point3(-1,-1,-0.7),Vec3(0,0,-2),Vec3(0,2,0));
+    wallleft->setMaterial(matte3);
+    wallleft->setSampler(hs);
+
+    std::shared_ptr<Rectangle> wallright = std::make_shared<Rectangle>(Point3(1,-1,-0.7),Vec3(0,2,0),Vec3(0,0,-2));
+    wallright->setMaterial(matte4);
+    wallright->setSampler(hs);
+
+    std::shared_ptr<Rectangle> wallfront = std::make_shared<Rectangle>(Point3(1,-1,-2.7),Vec3(0,2,0),Vec3(-2,0,0));
+    wallfront->setMaterial(matte5);
+    wallfront->setSampler(hs);
+
+    std::shared_ptr<Rectangle> wallback = std::make_shared<Rectangle>(Point3(-1,-1,0.3),Vec3(0,2,0),Vec3(2,0,0));
+    wallback->setMaterial(matte6);
+    wallback->setSampler(hs);
+
+
+
+    
+    objects.push_back(floor);
+    objects.push_back(ceil);
+    objects.push_back(wallleft);
+    objects.push_back(wallright);
+    objects.push_back(wallfront);
+    objects.push_back(wallback);
     objects.push_back(rect);
-    objects.push_back(plane2);
-
 
 
     
     
-
+    /*
     camera.setWidth(SCREEN_W);
     camera.setHeight(SCREEN_H);
     camera.setAspect(4 / 3);
     camera.setFovAngle(90);
     camera.setPosition(Point3(0, 0, 0));
     camera.setDistance(-1);
-    camera.setSampler(hs);
+    camera.setSampler(pr2);
+    */
+
+
+    camera.setWidth(SCREEN_W);
+    camera.setHeight(SCREEN_H);
+    camera.setAspect(1);
+    camera.setFovAngle(90);
+    camera.setPosition(Point3(0, 0, 0));
+    camera.setDistance(-1);
+    camera.setSampler(pr2);
 
     //Tracer constructor
     __tracer = std::make_shared<PathTracer>();

@@ -8,14 +8,14 @@ const double TWO_PI = 6.2831853071795864769;
 const double INV_PI = 0.3183098861837906715;
 const double INV_TWO_PI = 0.1591549430918953358;
 const double DOUBLE_INFINITY = INFINITY;
-const int SCREEN_W = 640;
-const int SCREEN_H = 480;
+const int SCREEN_W = 240;
+const int SCREEN_H = 240;
 const double REALLY_SMALLF = 1e-15f;
 const double REALLY_SMALLD = 1e-15;
 const double MIN_DIST = 1e-4;
 const double MAX_DIST = 1e10;
-const int MAX_DEPTH = 1;
-const int NUM_SAMPLES = 8;
+const int MAX_DEPTH = 3;
+const int NUM_SAMPLES = 16;
 
 
 const int primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 

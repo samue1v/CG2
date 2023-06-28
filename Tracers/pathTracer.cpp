@@ -22,7 +22,7 @@ RGBcolor PathTracer::traceRay(const Ray & ray, int depth){
     //exit(-1);
     if(depth>=MAX_DEPTH){
         //std::cout<<"maxima profundidade alcançada\n";
-        return RGBcolor();
+        return RGBcolor(0,0,0);
     }
     //deve apenas procurar por interseções nos objetos
     //std::cout<<"raydir no tracer: " <<  ray.getUnitRay();

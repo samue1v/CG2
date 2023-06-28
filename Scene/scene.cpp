@@ -2,6 +2,7 @@
 #include "../Misc/global.h"
 #include "../Tracers/tracer.h"
 
+
 Scene::Scene() {}
 
 
@@ -13,9 +14,10 @@ bool Scene::render(std::unique_ptr<uint8_t[]> &data)
     //int MAX_DEPTH = 3;
     std::cout << "Start.\n";
     std::cout << std::fixed;
-    std::cout << std::setprecision(3);
+    std::cout << std::setprecision(6);
     for (int c = 0; c < SCREEN_H; c++)
     {
+        //std::cout<<"l/c: " << c << std::endl;
         for (int l = 0; l < SCREEN_W; l++)
         {
 
@@ -31,6 +33,7 @@ bool Scene::render(std::unique_ptr<uint8_t[]> &data)
                 //}
             }
             intensitySum = intensitySum / double(NUM_SAMPLES);
+            //std::cout<<intensitySum;
             //if(intensitySum.x() == 0 && intensitySum.y() == 0 && intensitySum.z() == 0){std::cout<<"sdjmklad\n";exit(-1);}
 
             if (intensitySum.x() > 1 || intensitySum.y() > 1 || intensitySum.z() > 1)

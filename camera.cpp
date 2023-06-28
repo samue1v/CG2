@@ -154,9 +154,9 @@ bool Camera::generateRay(double proScreenX, double proScreenY, Ray &cameraRay)  
 	cameraRay.setRay(screenWorldCoordinate - cameraPosition);
 	*/
 	Pair pixelSample = sampler->getSample(); 
-	double px = (2 * ( (proScreenX + pixelSample[0])/ screenWidth ) - 1) * tan(fovAngle / 2 * M_PI / 180) * aspectRatio;
-	double py = (1 - 2* ((proScreenY + pixelSample[1]) / screenHeight)) * tan(fovAngle / 2 * M_PI / 180);
-	Point3 canvasPoint(px,py,-1/*cameraDistance*/);
+	double px = (2 * ( (proScreenX + pixelSample[0])/ screenWidth ) - 1) * tan(fovAngle / 2.0 * M_PI / 180.0) * aspectRatio;
+	double py = (1 - 2* ((proScreenY + pixelSample[1]) / screenHeight)) * tan(fovAngle / 2.0 * M_PI / 180.0);
+	Point3 canvasPoint(px,py,cameraDistance);
 	cameraRay = Ray(canvasPoint,Point3(0,0,0));
 	
 	cameraRay.setOrigin(canvasPoint);
