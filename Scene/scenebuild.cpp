@@ -13,54 +13,61 @@
 void Scene::sceneBuild(){
     //Samplers construction
     std::shared_ptr<Sampler> hs = std::make_shared<HaltonSampler>(NUM_CHUNKS, NUM_SAMPLES);
+    std::shared_ptr<Sampler> hs2 = std::make_shared<HaltonSampler>(NUM_CHUNKS, 4);
+    std::shared_ptr<Sampler> hs3 = std::make_shared<HaltonSampler>(NUM_CHUNKS, 10);
     std::shared_ptr<Sampler> pr = std::make_shared<PureRandom>(NUM_CHUNKS, NUM_SAMPLES);
     std::shared_ptr<Sampler> pr2 = std::make_shared<PureRandom>(NUM_CHUNKS, NUM_SAMPLES);
 
     //Materials constructor
     std::shared_ptr<Matte> matte1 = std::make_shared<Matte>();
     //matte1->setcd(Vec3(0.41,0.08,0.56));
-    matte1->setcd(Vec3(1,1,1));
+    matte1->setcd(Vec3(29, 27, 168)/255.0);
     matte1->setkd(1);
-    matte1->setSampler(hs);
+    matte1->setSampler(pr);
 
     std::shared_ptr<Matte> matte2 = std::make_shared<Matte>();
     matte2->setcd(Vec3(1,1,0));
     matte2->setkd(1);
-    matte2->setSampler(hs);
+    matte2->setSampler(pr);
 
     std::shared_ptr<Matte> matte3 = std::make_shared<Matte>();
-    matte3->setcd(Vec3(1,1,1));
+    matte3->setcd(Vec3(66, 191, 8)/255.0);
     matte3->setkd(1);
-    matte3->setSampler(hs);
+    matte3->setSampler(pr);
 
     std::shared_ptr<Matte> matte4 = std::make_shared<Matte>();
-    matte4->setcd(Vec3(1,1,1));
+    matte4->setcd(Vec3(214, 6, 6)/255.0);
     matte4->setkd(1);
-    matte4->setSampler(hs);
+    matte4->setSampler(pr);
 
 
     std::shared_ptr<Matte> matte5 = std::make_shared<Matte>();
     matte5->setcd(Vec3(1,1,1));
     matte5->setkd(1);
-    matte5->setSampler(hs);
+    matte5->setSampler(pr);
 
     std::shared_ptr<Matte> matte6 = std::make_shared<Matte>();
     matte6->setcd(Vec3(1,1,1));
     matte6->setkd(1);
-    matte6->setSampler(hs);
+    matte6->setSampler(pr);
+
+    std::shared_ptr<Matte> matte7 = std::make_shared<Matte>();
+    matte7->setcd(Vec3(1,1,1));
+    matte7->setkd(1);
+    matte7->setSampler(pr);
 
     std::shared_ptr<Emissive> emissionmat = std::make_shared<Emissive>();
     emissionmat->setce(RGBcolor(1,1,1));
-    emissionmat->setls(1);
+    emissionmat->setls(8);
 
     //rectangle light
     //std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(-0.75,0.5,-1.25),Vec3(0,0,-0.5),Vec3(0.5,0,0));
     //rect->setMaterial(emissionmat);
     //rect->setSampler(hs);
 
-    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(0.75,0.3,-1.2),Vec3(-1.5,0,0),Vec3(0,0,-1.5));
+    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(0.6,0.99,-1.5),Vec3(-1.3,0,0),Vec3(0,0,-1.3));
     rect->setMaterial(emissionmat);
-    rect->setSampler(hs);
+    rect->setSampler(pr);
     
 
     std::shared_ptr<AreaLight> rectlight = std::make_shared<AreaLight>();
@@ -85,27 +92,31 @@ void Scene::sceneBuild(){
 
     std::shared_ptr<Rectangle> floor = std::make_shared<Rectangle>(Point3(1,-1,-0.7),Vec3(0,0,-2),Vec3(-2,0,0));
     floor->setMaterial(matte1);
-    floor->setSampler(hs);
+    floor->setSampler(pr);
 
     std::shared_ptr<Rectangle> ceil = std::make_shared<Rectangle>(Point3(-1,1,-0.7),Vec3(0,0,-2),Vec3(2,0,0));
     ceil->setMaterial(matte2);
-    ceil->setSampler(hs);
+    ceil->setSampler(pr);
 
     std::shared_ptr<Rectangle> wallleft = std::make_shared<Rectangle>(Point3(-1,-1,-0.7),Vec3(0,0,-2),Vec3(0,2,0));
     wallleft->setMaterial(matte3);
-    wallleft->setSampler(hs);
+    wallleft->setSampler(pr);
 
     std::shared_ptr<Rectangle> wallright = std::make_shared<Rectangle>(Point3(1,-1,-0.7),Vec3(0,2,0),Vec3(0,0,-2));
     wallright->setMaterial(matte4);
-    wallright->setSampler(hs);
+    wallright->setSampler(pr);
 
     std::shared_ptr<Rectangle> wallfront = std::make_shared<Rectangle>(Point3(1,-1,-2.7),Vec3(0,2,0),Vec3(-2,0,0));
     wallfront->setMaterial(matte5);
-    wallfront->setSampler(hs);
+    wallfront->setSampler(pr);
 
     std::shared_ptr<Rectangle> wallback = std::make_shared<Rectangle>(Point3(-1,-1,0.3),Vec3(0,2,0),Vec3(2,0,0));
     wallback->setMaterial(matte6);
-    wallback->setSampler(hs);
+    wallback->setSampler(pr);
+
+    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Point3(0.3,-0.5,-1.6),0.4);
+    sphere->setMaterial(matte7);
+    sphere->setSampler(pr);
 
 
 
@@ -117,6 +128,7 @@ void Scene::sceneBuild(){
     objects.push_back(wallfront);
     objects.push_back(wallback);
     objects.push_back(rect);
+    objects.push_back(sphere);
 
 
     

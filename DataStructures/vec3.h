@@ -121,6 +121,12 @@ inline Vec3 normalize(const Vec3& v) {
   return Vec3(v.x() / bigger, v.y() / bigger, v.z() / bigger) ;
 }
 
+inline void gammaCorrect(Vec3 & v){
+    v[0] = pow(v[0],1.0/2.2);
+    v[1] = pow(v[1],1.0/2.2);
+    v[2] = pow(v[2],1.0/2.2);
+}
+
 using Point3 = Vec3;
 using RGBcolor = Vec3;
 

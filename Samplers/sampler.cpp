@@ -49,7 +49,7 @@ Vec3 Sampler::sampleHemisphere(){
     Vec2 randSample = getRandomSample();
     double cos_phi = cos(2.0 * PI * randSample.y());
     double sin_phi = sin(2.0 * PI * randSample.y());
-    double cos_theta = randSample.x();//pow((1.0f - randSample.y()), 1.0f / (exp + 1.0f));
+    double cos_theta = /*randSample.x()*/pow((1.0 - randSample.x()), 1.0 / (2 + 1.0)); //testing cossine
     double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
     double pu = sin_theta * cos_phi;
     double pv = sin_theta * sin_phi;

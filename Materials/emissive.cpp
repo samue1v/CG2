@@ -1,15 +1,17 @@
 #include "emissive.h"
+#include "../Misc/global.h"
 
 Emissive::Emissive() : Material(){}
 
 Emissive::~Emissive(){};
 
 RGBcolor Emissive::shade(HitMemory & hitmem){
+    /*
     if (hitmem.depth == 1) {
         return RGBcolor();
     }
-    
-    if (dot(-hitmem.poiNormal,hitmem.rayDir) > 0.0) {
+    */
+    if (dot(-hitmem.poiNormal,hitmem.rayDir) > 0.0 && hitmem.depth == 0) {
         return __ls * __ce;
     } 
     

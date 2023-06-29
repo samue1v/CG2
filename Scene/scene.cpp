@@ -2,7 +2,6 @@
 #include "../Misc/global.h"
 #include "../Tracers/tracer.h"
 
-
 Scene::Scene() {}
 
 
@@ -35,11 +34,13 @@ bool Scene::render(std::unique_ptr<uint8_t[]> &data)
             intensitySum = intensitySum / double(NUM_SAMPLES);
             //std::cout<<intensitySum;
             //if(intensitySum.x() == 0 && intensitySum.y() == 0 && intensitySum.z() == 0){std::cout<<"sdjmklad\n";exit(-1);}
-
+    
             if (intensitySum.x() > 1 || intensitySum.y() > 1 || intensitySum.z() > 1)
             {
                 intensitySum = normalize(intensitySum);
             }
+
+            gammaCorrect(intensitySum);
 
             Vec3 colorRes = Vec3(255.0, 255.0, 255.0) * intensitySum;
             // std::cout<< "line: "<< l << " column: " << c << " intensity: " << colorRes <<std::endl;
