@@ -87,3 +87,7 @@ double PointLight::G(const HitMemory & hitmem){
 double PointLight::pdf(const HitMemory & hitmem){
     return 1;
 }
+
+double PointLight::getNumSamples(){
+    return 0.0;
+}

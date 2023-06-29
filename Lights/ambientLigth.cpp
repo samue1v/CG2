@@ -32,3 +32,7 @@ double AmbientLight::pdf(const HitMemory & hitmem){
 bool AmbientLight::inShadow(const Ray & ray, const HitMemory & hitmem){
     return false;
 }
+
+double AmbientLight::getNumSamples(){
+    return 0.0;
+}

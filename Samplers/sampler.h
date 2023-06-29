@@ -10,7 +10,11 @@
 class Sampler{
     public:
     Sampler();
-    Sampler(int numChunks,int numSamples);
+    Sampler(int numChunks,int numSamples,bool fixed);
+
+    double getNumSamples();
+
+    double getNumChunks();
 
     double getRandomNumber();
 
@@ -35,6 +39,7 @@ class Sampler{
     int __indexChunk1,__indexChunk2;
     int __currentSample;
     int __randIndex;
+    bool __fixed;
     std::vector<Vec2> __random_vector;
     std::vector<std::vector<double>> __vector_samples;
     std::random_device __rd;

@@ -59,7 +59,7 @@ bool Scene::objHit(const Ray &ray, HitMemory &hitdata)
     hitdata.pIntensity = Vec3(0, 0, 0);
     bool objIntersect = false;
 
-    //std::cout<<objects.size()<<std::endl;]
+    //std::cout<<objects.size()<<std::endl;
 
     for (auto obj : objects)
     {

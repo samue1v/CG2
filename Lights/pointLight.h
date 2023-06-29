@@ -19,6 +19,7 @@ class PointLight : public LightBase{
         void setPosition(Point3 position);
         Vec3 getIntensity();
         void setIntensity(Vec3 intensity);
+        double getNumSamples();
 
 };
 void inline PointLight::setPosition(Point3 position){

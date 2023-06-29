@@ -2,7 +2,7 @@
 
 PureRandom::PureRandom() : Sampler(){}
 
-PureRandom::PureRandom(int numSamples,int numChunks) : Sampler(numSamples,numChunks){}
+PureRandom::PureRandom(int numSamples,int numChunks) : Sampler(numSamples,numChunks,false){}
 
 PureRandom::~PureRandom(){}
 

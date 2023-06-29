@@ -34,9 +34,9 @@ bool AreaLight::inShadow(const Ray & ray,const HitMemory & hitmem){
 }
 
 Vec3 AreaLight::getDirection(const HitMemory & hitmem){
-    Vec3 sample = __object->sample();
-    currentNormal = __object->getNormal(sample);
-    currentWi = unit(sample - hitmem.poi);
+    currentSamplePoint = __object->sample();
+    currentNormal = __object->getNormal(currentSamplePoint);
+    currentWi = unit(currentSamplePoint - hitmem.poi);
     return currentWi;
 }
 
@@ -61,4 +61,8 @@ RGBcolor AreaLight::L(HitMemory & hitmem){
 
 double AreaLight::pdf(const HitMemory & hitmem){
     return __object->pdf(hitmem);
+}
+
+double AreaLight::getNumSamples(){
+    return __object->getSampler()->getNumSamples();
 }

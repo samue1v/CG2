@@ -17,6 +17,7 @@ class LightBase{
         virtual RGBcolor L(HitMemory & hitmem) = 0;
         virtual double G(const HitMemory & hitmem) = 0;
         virtual double pdf(const HitMemory & hitmem) = 0;
+        virtual double getNumSamples() = 0;
         virtual ~LightBase() = default;
 };
 

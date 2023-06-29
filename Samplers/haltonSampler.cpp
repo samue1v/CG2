@@ -17,30 +17,42 @@ HaltonSampler::HaltonSampler() : Sampler(){
 
 }
 
-HaltonSampler::HaltonSampler(int numChunks,int numSamples) : Sampler(numChunks,numSamples){
+HaltonSampler::HaltonSampler(int numChunks,int numSamples,bool fixed) : Sampler(numChunks,numSamples,fixed){
 
-    perms.reserve(NUM_CHUNKS);
-    perms.resize(NUM_CHUNKS);
-    for(int i = 0;i<NUM_CHUNKS;i++){
+    perms.reserve(numChunks);
+    perms.resize(numChunks);
+    for(int i = 0;i<numChunks;i++){
         perms[i].reserve(primes[i]);
         perms[i].resize(primes[i]);
         for(int j = 0;j<primes[i];j++){
             perms[i][j] = j;
         }
         std::shuffle(perms[i].begin()+1,perms[i].end(),__mt);
+    } 
+
+
+    for(int f = 0;f<numChunks;f++){
+        for(int s = 0;s<numSamples;s++){
+            __vector_samples[f][s] = genSamples(s,primes[f],f);
+        }
     }
 
-    for(int j = 0;j<numChunks;++j){
-        for(int s = 1;s<=numSamples;s++){
-            __vector_samples[j][s-1] = genSamples(s,primes[j],j);
+    if(fixed){
+        
+        __indexChunk1 = getRandomNumber() * __numChunks;
+        __indexChunk2 = __indexChunk1;
+        while(__indexChunk1 == __indexChunk2){
+            __indexChunk2 = getRandomNumber() * __numChunks;
         }
+
     }
 }
 
 double HaltonSampler::genSamples(int index,int base,int baseIndex){
-    double fraction = 1;
-    double res = 0;
-    while(index>0){
+    double fraction = 1.0;
+    double res = 0.0;
+    //index = perms[baseIndex][index];
+    while(index>0.0){
         fraction /= base;
         res += fraction * perms[baseIndex][(index % base)];
         index /= base;
@@ -49,10 +61,17 @@ double HaltonSampler::genSamples(int index,int base,int baseIndex){
 }
 
 Pair HaltonSampler::getSample(){
-    __indexChunk1 == __indexChunk2 ? __indexChunk1 = (__indexChunk1+1) % __numChunks,__indexChunk2 = (__indexChunk1 + 1) % __numChunks: 1;
-    Pair p(__vector_samples[__indexChunk1][__currentSample],__vector_samples[__indexChunk2][__currentSample]);
-    //std::cout<< "ic1: "<<__indexChunk1 << " ic2 "<<__indexChunk2<<std::endl;
-    __currentSample+1 >= __numSamples ? __indexChunk2 = (__indexChunk2+1) % __numChunks,__currentSample = 0 : __currentSample++;
+    Pair p;
+    if(__fixed){
+        p = Pair(__vector_samples[__indexChunk1][__currentSample],__vector_samples[__indexChunk2][__currentSample]);
+        __currentSample = (__currentSample + 1) % __numSamples;
+    }
+    else{
+        __indexChunk1 == __indexChunk2 ? __indexChunk1 = (__indexChunk1+1) % __numChunks,__indexChunk2 = (__indexChunk1 + 1) % __numChunks: 1;
+        p = Pair(__vector_samples[__indexChunk1][__currentSample],__vector_samples[__indexChunk2][__currentSample]);
+        __currentSample+1 >= __numSamples ? __indexChunk2 = (__indexChunk2+1) % __numChunks,__currentSample = 0 : __currentSample++;
+    }
+    
     return p;
 
 }

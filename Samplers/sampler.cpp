@@ -9,17 +9,19 @@ Sampler::Sampler(){
     __indexChunk2 = 0;
     __currentSample = 0;
     __randIndex = 0;
+    __fixed = false;
     __mt = std::mt19937(__rd()); 
-    __dis = std::uniform_real_distribution<>(0.0,1.0);
+    __dis = std::uniform_real_distribution<double>(0.0,1.0);
 }
 
-Sampler::Sampler(int numChunks,int numSamples){
+Sampler::Sampler(int numChunks,int numSamples,bool fixed){
     __numChunks = numChunks;
     __numSamples = numSamples;
     __currentSample = 0;
     __indexChunk1 = 0;
     __indexChunk2 = 1;
     __randIndex = 0;
+    __fixed = fixed;
     __mt = std::mt19937(__rd()); 
     __dis = std::uniform_real_distribution<double>(0.0,1.0);
     __vector_samples = std::vector<std::vector<double>>(__numChunks,std::vector<double>(__numSamples,0));
@@ -33,6 +35,14 @@ Sampler::Sampler(int numChunks,int numSamples){
 }
 
 Sampler::~Sampler(){}
+
+double Sampler::getNumSamples(){
+    return __numSamples;
+}
+
+double Sampler::getNumChunks(){
+    return __numChunks;
+}
 
 double Sampler::getRandomNumber(){
     return(__dis(__mt));
@@ -49,7 +59,7 @@ Vec3 Sampler::sampleHemisphere(){
     Vec2 randSample = getRandomSample();
     double cos_phi = cos(2.0 * PI * randSample.y());
     double sin_phi = sin(2.0 * PI * randSample.y());
-    double cos_theta = /*randSample.x()*/pow((1.0 - randSample.x()), 1.0 / (2 + 1.0)); //testing cossine
+    double cos_theta = /*randSample.x()*/pow((1.0 - randSample.x()), 1.0 / (2.0 + 1.0)); //testing cossine
     double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
     double pu = sin_theta * cos_phi;
     double pv = sin_theta * sin_phi;

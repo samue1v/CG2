@@ -16,6 +16,7 @@ class AmbientLight : public LightBase{
         double pdf(const HitMemory & hitmem);
         RGBcolor L(HitMemory & hitmem);
         bool inShadow(const Ray & ray, const HitMemory & hitmem);
+        double getNumSamples();
 
 
 };

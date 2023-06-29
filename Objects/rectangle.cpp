@@ -64,7 +64,8 @@ Vec3 Rectangle::sample() const{
     //exit(-1);
     //return __p0 + __l1*0.5 /*sample.x()*/ + __l2*0.5 /*sample.y()*/;
     //std::cout<<sample;
-    return __p0 + __l1*sample.x() + __l2*sample.y();
+    //std::cout<<__p0 + __l1*sample.x() + __l2*sample.y();
+    return __p0 + __l1*sample.x() + __l2*sample.y(); //+ Point3(0,-0.3,0);
 }
 
 

@@ -12,11 +12,10 @@
 
 void Scene::sceneBuild(){
     //Samplers construction
-    std::shared_ptr<Sampler> hs = std::make_shared<HaltonSampler>(NUM_CHUNKS, NUM_SAMPLES);
-    std::shared_ptr<Sampler> hs2 = std::make_shared<HaltonSampler>(NUM_CHUNKS, 4);
-    std::shared_ptr<Sampler> hs3 = std::make_shared<HaltonSampler>(NUM_CHUNKS, 10);
+    std::shared_ptr<Sampler> hs2 = std::make_shared<HaltonSampler>(NUM_CHUNKS, 20,true);
+    std::shared_ptr<Sampler> hs = std::make_shared<HaltonSampler>(NUM_CHUNKS, NUM_SAMPLES,false);
     std::shared_ptr<Sampler> pr = std::make_shared<PureRandom>(NUM_CHUNKS, NUM_SAMPLES);
-    std::shared_ptr<Sampler> pr2 = std::make_shared<PureRandom>(NUM_CHUNKS, NUM_SAMPLES);
+    std::shared_ptr<Sampler> pr2 = std::make_shared<PureRandom>(NUM_CHUNKS, 64);
 
     //Materials constructor
     std::shared_ptr<Matte> matte1 = std::make_shared<Matte>();
@@ -65,9 +64,9 @@ void Scene::sceneBuild(){
     //rect->setMaterial(emissionmat);
     //rect->setSampler(hs);
 
-    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(0.6,0.99,-1.5),Vec3(-1.3,0,0),Vec3(0,0,-1.3));
+    std::shared_ptr<Rectangle> rect = std::make_shared<Rectangle>(Point3(0.35,0.98,-0.8),Vec3(-0.8,0,0),Vec3(0,0,-0.8));
     rect->setMaterial(emissionmat);
-    rect->setSampler(pr);
+    rect->setSampler(hs2);
     
 
     std::shared_ptr<AreaLight> rectlight = std::make_shared<AreaLight>();
@@ -114,7 +113,7 @@ void Scene::sceneBuild(){
     wallback->setMaterial(matte6);
     wallback->setSampler(pr);
 
-    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Point3(0.3,-0.5,-1.6),0.4);
+    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Point3(0.4,-0.3,-1.6),0.4);
     sphere->setMaterial(matte7);
     sphere->setSampler(pr);
 
@@ -150,7 +149,7 @@ void Scene::sceneBuild(){
     camera.setFovAngle(90);
     camera.setPosition(Point3(0, 0, 0));
     camera.setDistance(-1);
-    camera.setSampler(pr2);
+    camera.setSampler(hs);
 
     //Tracer constructor
     __tracer = std::make_shared<PathTracer>();

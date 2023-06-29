@@ -12,7 +12,7 @@ RGBcolor Matte::shade(HitMemory & hitmem){
     double pdf;
     //std::cout<<L;
     //std::cout<<"terminei o area shade!\n";
-    for(int i = 0;i<3;i++){
+    for(int i = 0;i<5;i++){
         wo = -hitmem.rayDir;
 
         RGBcolor f = diffuse_brdf.sample_f(hitmem, wo, wi, pdf);
@@ -27,7 +27,7 @@ RGBcolor Matte::shade(HitMemory & hitmem){
         //if(L.x()>0 || L.y()>0){std::cout<<L;}
         L += f * hitmem.scene->__tracer->traceRay(reflected_ray, hitmem.depth + 1) * ndotwi / pdf;
     }
-    return L/((double)3);
+    return L/((double)5);
 }
 
 
@@ -38,7 +38,8 @@ RGBcolor Matte::areaLightShade(HitMemory & hitmem){
 
     for (int j = 0; j < num_lights; j++) {
         RGBcolor T;
-        for(int i = 0;i<1;i++){
+        double numSamples = hitmem.scene->lights[j]->getNumSamples();
+        for(int i = 0;i<numSamples;i++){
             Vec3 wi = hitmem.scene->lights[j]->getDirection(hitmem);
             double ndotwi = dot(hitmem.poiNormal,wi);
             if (ndotwi > 0.0) {
@@ -51,13 +52,13 @@ RGBcolor Matte::areaLightShade(HitMemory & hitmem){
                     in_shadow = sr.w.lights[j]->in_shadow(shadow_ray, sr);
                 }
                 */
-                Ray shadow_ray(hitmem.poi + wi,hitmem.poi + wi*0.1);
+                Ray shadow_ray(hitmem.poi + wi,hitmem.poi + wi*0.01);
                 if (!hitmem.scene->lights[j]->inShadow(shadow_ray, hitmem)) {
                     T += diffuse_brdf.f(hitmem, wo, wi) * hitmem.scene->lights[j]->L(hitmem) * hitmem.scene->lights[j]->G(hitmem) * ndotwi/ hitmem.scene->lights[j]->pdf(hitmem);
                 }
             }
         }
-        T /= (double)1;
+        T /= numSamples;
         L+=T;
     }
     

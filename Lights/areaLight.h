@@ -14,6 +14,7 @@ class AreaLight : public LightBase{
     RGBcolor L(HitMemory & hitmem);
     double G(const HitMemory & hitmem);
     double pdf(const HitMemory & hitmem);
+    double getNumSamples();
     private:
     std::shared_ptr<ObjectBase> __object;
     std::shared_ptr<Material> __material;
